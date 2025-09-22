@@ -66,6 +66,8 @@ import robotcore.Subsystem;
  * Remove or comment out the @Disabled line to add this OpMode to the Driver Station OpMode list
  */
 
+
+// yo whats up my sigma
 @TeleOp(name="DriveTrainTest", group="Linear OpMode")
 
 public class DriveTrainTest extends Subsystem {
