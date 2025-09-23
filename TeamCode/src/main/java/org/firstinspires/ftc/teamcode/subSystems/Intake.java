@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.subSystems;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 import robotcore.Subsystem;
 
@@ -18,7 +19,7 @@ public class Intake extends Subsystem {
         assignGamePads(opMode.gamepad1, opMode.gamepad2);
 
         intakeMotor = hardwareMap.get(DcMotor.class,"intake_motor");
-
+        intakeMotor.setDirection(DcMotorSimple.Direction.REVERSE);
     }
 
     public void runIntake(){
