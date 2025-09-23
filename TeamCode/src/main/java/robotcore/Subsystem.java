@@ -6,7 +6,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
-
+import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
 public abstract class Subsystem {
     protected HardwareMap hardwareMap;
@@ -17,6 +17,23 @@ public abstract class Subsystem {
 
     protected Gamepad gamepad2;
 
-    public abstract void init();
+    public void setTelemetry(Telemetry telemetry) {
+        this.telemetry = telemetry;
+    }
+
+    public void setHardwareMap(HardwareMap hardwareMap){
+        this.hardwareMap = hardwareMap;
+    }
+
+    public void assignGamePads(Gamepad gamepad1, Gamepad gamepad2){
+        this.gamepad1 = gamepad1;
+        this.gamepad2 = gamepad2;
+    }
+
+
+    public abstract void init(OpMode opMode);
+
 
  }
+
+

@@ -1,5 +1,4 @@
 package org.firstinspires.ftc.teamcode.subSystems;
-
 /* Copyright (c) 2021 FIRST. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification,
@@ -31,9 +30,11 @@ package org.firstinspires.ftc.teamcode.subSystems;
 
 
 
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.HardwareDevice;
+import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import robotcore.Subsystem;
@@ -80,8 +81,16 @@ public class DriveTrainTest extends Subsystem {
     private DcMotor backRightDrive = null;
 
     @Override
-    public void init() {
+    public void init(OpMode opMode) {
 
+        setTelemetry(opMode.telemetry);
+        setHardwareMap(opMode.hardwareMap);
+        assignGamePads(opMode.gamepad1, opMode.gamepad2);
+        if (hardwareMap == null){
+            telemetry.addData("u messed up buddy","sigma");
+            telemetry.update();
+            throw new RuntimeException("whats up ma sigma");
+        }
 
         // Initialize the hardware variables. Note that the strings used here must correspond
         // to the names assigned during the robot configuration step on the DS or RC devices.

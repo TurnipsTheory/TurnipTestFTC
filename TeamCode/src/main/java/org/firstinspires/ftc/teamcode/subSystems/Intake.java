@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.subSystems;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
 import robotcore.Subsystem;
 
@@ -11,7 +12,7 @@ public class Intake extends Subsystem {
 
 
     @Override
-    public void init() {
+    public void init(OpMode opMode) {
         intakeMotor = hardwareMap.get(DcMotor.class,"intake_motor");
     }
 

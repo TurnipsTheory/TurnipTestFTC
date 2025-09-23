@@ -15,8 +15,8 @@ public class MainOpMode extends OpMode {
 
 
     public void init(){
-        DriveTrain.init();
-        Intake.init();
+        DriveTrain.init(this);
+        Intake.init(this);
     }
 
     @Override
