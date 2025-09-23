@@ -31,7 +31,7 @@ package org.firstinspires.ftc.teamcode.subSystems;
 
 
 
-//import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -68,7 +68,6 @@ import robotcore.Subsystem;
 
 
 // yo whats up my sigma
-@TeleOp(name="DriveTrainTest", group="Linear OpMode")
 
 public class DriveTrainTest extends Subsystem {
 
@@ -117,7 +116,8 @@ public class DriveTrainTest extends Subsystem {
             double max;
 
             // POV Mode uses left joystick to go forward & strafe, and right joystick to rotate.
-            double axial   = -gamepad1.left_stick_y;  // Note: pushing stick forward gives negative value
+            //double axial   = -gamepad1.left_stick_y;  // Note: pushing stick forward gives negative value
+            double axial = 1;
             double lateral =  gamepad1.left_stick_x;
             double yaw     =  gamepad1.right_stick_x;
 
