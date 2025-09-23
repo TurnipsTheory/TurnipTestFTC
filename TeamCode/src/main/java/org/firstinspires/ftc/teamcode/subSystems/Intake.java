@@ -13,7 +13,12 @@ public class Intake extends Subsystem {
 
     @Override
     public void init(OpMode opMode) {
+        setTelemetry(opMode.telemetry);
+        setHardwareMap(opMode.hardwareMap);
+        assignGamePads(opMode.gamepad1, opMode.gamepad2);
+
         intakeMotor = hardwareMap.get(DcMotor.class,"intake_motor");
+
     }
 
     public void runIntake(){
