@@ -12,14 +12,9 @@ public class Intake extends Subsystem {
     boolean isOn = false;
 
 
-    public Intake(OpMode opMode){
-        super(opMode);
-    }
     @Override
     public void init(OpMode opMode) {
-        setTelemetry(opMode.telemetry);
-        setHardwareMap(opMode.hardwareMap);
-        assignGamePads(opMode.gamepad1, opMode.gamepad2);
+        instantiateSubsystem(opMode);
 
         intakeMotor = hardwareMap.get(DcMotor.class,"intake_motor");
         intakeMotor.setDirection(DcMotorSimple.Direction.REVERSE);

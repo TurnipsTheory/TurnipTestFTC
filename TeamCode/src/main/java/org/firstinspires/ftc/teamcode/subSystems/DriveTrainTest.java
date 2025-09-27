@@ -80,15 +80,11 @@ public class DriveTrainTest extends Subsystem {
     private DcMotor frontRightDrive = null;
     private DcMotor backRightDrive = null;
 
-    public DriveTrainTest(OpMode opMode){
-        super(opMode);
-    }
+
     @Override
     public void init(OpMode opMode) {
+        instantiateSubsystem(opMode);
 
-        setTelemetry(opMode.telemetry);
-        setHardwareMap(opMode.hardwareMap);
-        assignGamePads(opMode.gamepad1, opMode.gamepad2);
         if (hardwareMap == null){
             telemetry.addData("u messed up buddy","sigma");
             telemetry.update();

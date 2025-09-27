@@ -17,29 +17,17 @@ public abstract class Subsystem {
 
     protected Gamepad gamepad2;
 
-    public void setTelemetry(Telemetry telemetry) {
-        this.telemetry = telemetry;
-    }
 
-    public void setHardwareMap(HardwareMap hardwareMap) {
-
-        this.hardwareMap = hardwareMap;
-    }
-
-    public void assignGamePads(Gamepad gamepad1, Gamepad gamepad2) {
-        this.gamepad1 = gamepad1;
-        this.gamepad2 = gamepad2;
+    public void instantiateSubsystem(OpMode opMode){
+        this.telemetry = opMode.telemetry;
+        this.hardwareMap = opMode.hardwareMap;
+        this.gamepad1 = opMode.gamepad1;
+        this.gamepad2 = opMode.gamepad2;
     }
 
 
     public abstract void init(OpMode opMode);
 
-
-    public Subsystem(OpMode opMode) {
-        setTelemetry(opMode.telemetry);
-        setHardwareMap(opMode.hardwareMap);
-        assignGamePads(opMode.gamepad1, opMode.gamepad2);
-    }
 
  }
 
