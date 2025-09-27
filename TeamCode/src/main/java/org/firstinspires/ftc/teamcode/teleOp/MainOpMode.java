@@ -10,8 +10,8 @@ import org.firstinspires.ftc.teamcode.subSystems.Intake;
 
 @TeleOp(name="MainOpMode")
 public class MainOpMode extends OpMode {
-    DriveTrainTest DriveTrain = new DriveTrainTest();
-    Intake Intake = new Intake();
+    DriveTrainTest DriveTrain = new DriveTrainTest(this);
+    Intake Intake = new Intake(this);
 
 
     public void init(){

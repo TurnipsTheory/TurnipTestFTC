@@ -80,6 +80,9 @@ public class DriveTrainTest extends Subsystem {
     private DcMotor frontRightDrive = null;
     private DcMotor backRightDrive = null;
 
+    public DriveTrainTest(OpMode opMode){
+        super(opMode);
+    }
     @Override
     public void init(OpMode opMode) {
 

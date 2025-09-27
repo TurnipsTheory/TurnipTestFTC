@@ -21,11 +21,12 @@ public abstract class Subsystem {
         this.telemetry = telemetry;
     }
 
-    public void setHardwareMap(HardwareMap hardwareMap){
+    public void setHardwareMap(HardwareMap hardwareMap) {
+
         this.hardwareMap = hardwareMap;
     }
 
-    public void assignGamePads(Gamepad gamepad1, Gamepad gamepad2){
+    public void assignGamePads(Gamepad gamepad1, Gamepad gamepad2) {
         this.gamepad1 = gamepad1;
         this.gamepad2 = gamepad2;
     }
@@ -33,6 +34,12 @@ public abstract class Subsystem {
 
     public abstract void init(OpMode opMode);
 
+
+    public Subsystem(OpMode opMode) {
+        setTelemetry(opMode.telemetry);
+        setHardwareMap(opMode.hardwareMap);
+        assignGamePads(opMode.gamepad1, opMode.gamepad2);
+    }
 
  }
 

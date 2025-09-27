@@ -12,6 +12,9 @@ public class Intake extends Subsystem {
     boolean isOn = false;
 
 
+    public Intake(OpMode opMode){
+        super(opMode);
+    }
     @Override
     public void init(OpMode opMode) {
         setTelemetry(opMode.telemetry);
