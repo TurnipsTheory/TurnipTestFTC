@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.subSystems;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 import robotcore.Subsystem;
 
@@ -18,6 +19,9 @@ public class Flywheel extends Subsystem{
         instantiateSubsystem(opMode);
         flywheelLeft = hardwareMap.get(DcMotor.class, "flywheel_left");
         flywheelRight = hardwareMap.get(DcMotor.class, "flywheel_right");
+
+        flywheelRight.setDirection(DcMotorSimple.Direction.REVERSE);
+        flywheelLeft.setDirection(DcMotorSimple.Direction.REVERSE);
 
     }
 
