@@ -20,21 +20,23 @@ public class Flywheel extends Subsystem{
         flywheelLeft = hardwareMap.get(DcMotor.class, "flywheel_left");
         flywheelRight = hardwareMap.get(DcMotor.class, "flywheel_right");
 
-        flywheelRight.setDirection(DcMotorSimple.Direction.REVERSE);
-        flywheelLeft.setDirection(DcMotorSimple.Direction.REVERSE);
+        flywheelRight.setDirection(DcMotor.Direction.REVERSE);
+        flywheelLeft.setDirection(DcMotor.Direction.REVERSE);
 
     }
 
     public void runFlywheel(){
         if (gamepad1.bWasPressed()){
             if (isOn){
+                isOn = false;
                 flywheelLeft.setPower(0.0);
                 flywheelRight.setPower(0.0);
-                isOn = false;
+
             } else {
+                isOn = true;
                 flywheelRight.setPower(1.0);
                 flywheelLeft.setPower(1.0);
-                isOn = true;
+
             }
         }
     }
