@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.subSystems;
 
+import static android.os.SystemClock.sleep;
+
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.Servo;
 
@@ -21,7 +23,8 @@ public class Transfer extends Subsystem {
         if (gamepad1.x) {
             TransferServo.setPosition(0.5);
         } else {
-            TransferServo.setPosition(0.0);
+            TransferServo.setPosition(0.9);
         }
+
     }
 }
