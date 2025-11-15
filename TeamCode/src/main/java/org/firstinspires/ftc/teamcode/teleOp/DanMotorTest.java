@@ -32,7 +32,7 @@ public class DanMotorTest extends OpMode {
                 telemetry.addLine("off");
             } else {
                 isOn = true;
-                danMotor.setPower(1.0);
+                danMotor.setPower(0.85);
                 telemetry.addLine("on");
             }
 
