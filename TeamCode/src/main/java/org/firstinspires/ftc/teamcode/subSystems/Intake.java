@@ -21,8 +21,8 @@ public class Intake extends Subsystem {
     }
 
     public void runIntake(){
-        if (gamepad1.aWasPressed()){
-            if (isOn){
+        if (gamepad1.aWasPressed()) {
+            if (isOn) {
                 isOn = false;
                 intakeMotor.setPower(0.0);
                 telemetry.addLine("off");
