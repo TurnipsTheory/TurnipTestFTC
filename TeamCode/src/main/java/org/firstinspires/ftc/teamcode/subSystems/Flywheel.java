@@ -5,7 +5,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 import robotcore.Subsystem;
-
+//RI3D code DO NOT USE
 public class Flywheel extends Subsystem{
 
     private DcMotor flywheelLeft = null;
