@@ -26,7 +26,7 @@ public class MotorOuttake extends Subsystem {
                 telemetry.addLine("off");
             } else {
                 isOn = true;
-                OuttakeMotor.setPower(0.8);
+                OuttakeMotor.setPower(0.6);
                 telemetry.addLine("on");
             }
         }

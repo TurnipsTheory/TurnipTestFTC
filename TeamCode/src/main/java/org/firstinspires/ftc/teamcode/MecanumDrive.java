@@ -74,7 +74,7 @@ public final class MecanumDrive {
         // drive model parameters
         public double inPerTick = 0.00052720;
         public double lateralInPerTick = 0.004075;
-        public double trackWidthTicks = 0;
+        public double trackWidthTicks = 23679.4;
 
         // feedforward parameters (in tick units)
         public double kS = 1.073965;
@@ -147,8 +147,8 @@ public final class MecanumDrive {
             imu = lazyImu.get();
 
             // TODO: reverse encoders if needed
-            //   leftFront.setDirection(DcMotorSimple.Direction.REVERSE);
-
+            leftFront.setDirection(DcMotorSimple.Direction.REVERSE);
+            
             this.pose = pose;
         }
 
@@ -245,7 +245,7 @@ public final class MecanumDrive {
         rightFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         // TODO: reverse motor directions if needed
-        //   leftFront.setDirection(DcMotorSimple.Direction.REVERSE);
+       // leftFront.setDirection(DcMotorSimple.Direction.REVERSE);
 
         rightBack.setDirection(DcMotorSimple.Direction.REVERSE);
 
