@@ -41,7 +41,7 @@ public class Intake extends Subsystem {
             }
             else{
                 revIsOn = true;
-                inOn = false;
+                isOn = false;
                 intakeMotor.setPower(0.0);
                 intakeMotor.setPower(-1.0);
             }
