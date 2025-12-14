@@ -9,7 +9,8 @@ import robotcore.Subsystem;
 
 public class MotorTransfer extends Subsystem {
 
-    boolean isOn;
+    boolean isOn = false;
+    boolean revIsOn = false;
     private DcMotor TransferMotor = null;
 
 
@@ -31,8 +32,16 @@ public class MotorTransfer extends Subsystem {
                 telemetry.addLine("on");
             }
         }
-
-
-
+        if (gamepad1.yWasPressed()){
+            if(revIsOn) {
+                revIsOn = false;
+                TransferMotor.setPower(0.0);
+            }
+            else {
+                revIsOn = true;
+                isOn = false;
+                TransferMotor.setPower(-1.0);
+            }
+        }
     }
 }

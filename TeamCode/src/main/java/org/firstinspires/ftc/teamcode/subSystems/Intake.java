@@ -10,6 +10,7 @@ public class Intake extends Subsystem {
 
     private DcMotor intakeMotor = null;
     boolean isOn = false;
+    boolean revIsOn = false;
 
 
     @Override
@@ -28,12 +29,23 @@ public class Intake extends Subsystem {
                 telemetry.addLine("off");
             } else {
                 isOn = true;
+                revIsOn = false;
                 intakeMotor.setPower(1.0);
                 telemetry.addLine("on");
             }
         }
-
-
+        if (gamepad1.yWasPressed()) {
+            if (revIsOn){
+                revIsOn = false;
+                intakeMotor.setPower(0.0);
+            }
+            else{
+                revIsOn = true;
+                inOn = false;
+                intakeMotor.setPower(0.0);
+                intakeMotor.setPower(-1.0);
+            }
+        }
 
     }
 
