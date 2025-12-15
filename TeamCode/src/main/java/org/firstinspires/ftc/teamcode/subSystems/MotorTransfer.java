@@ -32,7 +32,7 @@ public class MotorTransfer extends Subsystem {
                 telemetry.addLine("on");
             }
         }
-        if (gamepad1.yWasPressed()){
+        if (gamepad1.left_bumper){
             if(revIsOn) {
                 revIsOn = false;
                 TransferMotor.setPower(0.0);
