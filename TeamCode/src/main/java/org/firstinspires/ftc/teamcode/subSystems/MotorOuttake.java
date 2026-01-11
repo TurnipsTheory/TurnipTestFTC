@@ -19,7 +19,7 @@ public class MotorOuttake extends Subsystem {
     }
 
     public void runOuttake(){
-        if (gamepad1.xWasPressed()) {
+        if (gamepad2.xWasPressed()) {
             if (isOn) {
                 isOn = false;
                 OuttakeMotor.setPower(0.0);

@@ -21,7 +21,7 @@ public class MotorTransfer extends Subsystem {
     }
 
     public void runTransfer(){
-        if (gamepad1.bWasPressed()) {
+        if (gamepad2.bWasPressed()) {
             if (isOn) {
                 isOn = false;
                 TransferMotor.setPower(0.0);
@@ -32,7 +32,7 @@ public class MotorTransfer extends Subsystem {
                 telemetry.addLine("on");
             }
         }
-        if (gamepad1.yWasPressed()){
+        if (gamepad2.yWasPressed()){
             if(revIsOn) {
                 revIsOn = false;
                 TransferMotor.setPower(0.0);
