@@ -1,7 +1,10 @@
 package org.firstinspires.ftc.teamcode.vision;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.CRServo;
+import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
@@ -13,15 +16,36 @@ import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 import java.util.List;
 import java.util.Locale;
 
+////@TeleOp(name= "Shared Values", group="Vision")
+//public class SharedVariables extends LinearOpMode{
+//    public static double camBearing = 0.0;
+//    private AprilTagProcessor aprilTag;
+//
+//    @Override
+//    public void runOpMode() throws InterruptedException {
+//
+//        List<AprilTagDetection> detections = aprilTag.getDetections();
+//
+//        camBearing = detections.get();
+//    }
+//}
+//    public class Global{
+//    public static double camBearing;
+//}
 @TeleOp(name="AprilTag Detection Test", group="Vision")
 public class AprilTagTest extends LinearOpMode {
 
     private VisionPortal visionPortal;
     private AprilTagProcessor aprilTag;
+    double bearingVal = 0.7;
+    private CRServo turretServo;
 
     @Override
+
     public void runOpMode() {
+        turretServo   = hardwareMap.get(CRServo.class, "turret_servo");
         initAprilTag();
+        turretCenter();
 
         telemetry.addData("Status", "Initialized");
         telemetry.update();
@@ -45,6 +69,8 @@ public class AprilTagTest extends LinearOpMode {
                             detection.ftcPose.pitch, detection.ftcPose.roll, detection.ftcPose.yaw));
                     telemetry.addLine(String.format(Locale.US, "RBE %6.1f %6.1f %6.1f  (inch, deg, deg)",
                             detection.ftcPose.range, detection.ftcPose.bearing, detection.ftcPose.elevation));
+                    bearingVal = detection.ftcPose.bearing;
+
                 } else {
                     telemetry.addLine(String.format(Locale.US, "\n==== Unknown Tag ID %d ====", detection.id));
                     telemetry.addLine(String.format(Locale.US, "Center %6.0f %6.0f   (pixels)",
@@ -56,12 +82,25 @@ public class AprilTagTest extends LinearOpMode {
             telemetry.addLine("PRY = Pitch, Roll, Yaw (Rotation)");
             telemetry.addLine("RBE = Range, Bearing, Elevation");
 
+            turretCenter();
+
             telemetry.update();
             sleep(20);
         }
 
         // Close the vision portal when done
         visionPortal.close();
+    }
+
+    public void turretCenter(){
+        telemetry.addLine("running centering of turret");
+            if (bearingVal < -0.5) {
+                turretServo.setPower(1.0);
+            } else if (bearingVal > 0.5) {
+                turretServo.setPower(-1.0);
+            } else {
+                turretServo.setPower(0.0);
+            }
     }
 
     /**
