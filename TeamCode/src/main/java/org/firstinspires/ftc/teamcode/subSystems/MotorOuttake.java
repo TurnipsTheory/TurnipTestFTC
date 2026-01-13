@@ -27,7 +27,7 @@ public class MotorOuttake extends Subsystem {
 
     boolean isOn;
     private DcMotor OuttakeMotor = null;
-    //private CRServo turretServo = null;
+    private CRServo turretServo = null;
 //    private AprilTagProcessor aprilTag;
 //    List<AprilTagDetection> detection = aprilTag.getDetections();
     //double bearingVal = AprilTagTest.camBearing;
@@ -36,7 +36,7 @@ public class MotorOuttake extends Subsystem {
     public void init(OpMode opMode) {
         instantiateSubsystem(opMode);
         OuttakeMotor = hardwareMap.get(DcMotor.class, "outtake_motor");
-        //turretServo   = hardwareMap.get(CRServo.class, "turret_servo");
+        turretServo   = hardwareMap.get(CRServo.class, "turret_servo");
     }
 
 //    public void turretCenter(){
