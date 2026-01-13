@@ -101,9 +101,9 @@ public class visionTest2 extends LinearOpMode {
             power = 1.0;
             turretServo.setDirection(CRServo.Direction.FORWARD);
             times += 1;
-        } else if (times == 10000000) {
+        } else if (times == 100) {
             power = -1.0;
-            turretServo.setDirection(CRServo.Direction.FORWARD);
+            turretServo.setDirection(CRServo.Direction.REVERSE);
             times -= 1;
         } else if (times > 1 ) {
             times = times + (int) Math.round(power);
