@@ -47,11 +47,10 @@ public class AprilTagTest extends LinearOpMode {
     // Smoothing variables
     private double smoothedBearing = 0;
     private long lastDetectionTime = 0;
-    private static final double SMOOTHING_FACTOR = 0.9;  // 0.0 = no smoothing, 1.0 = max smoothing
+    private static final double SMOOTHING_FACTOR = 0.3;  // 0.0 = no smoothing, 1.0 = max smoothing
     private double lastPower = 0;  // Track last power for derivative control
 
 
-    @Override
 
     public void runOpMode() {
         turretServo = hardwareMap.get(CRServo.class, "turret_servo");
@@ -71,14 +70,14 @@ public class AprilTagTest extends LinearOpMode {
             // Display info for each detected tag
             for (AprilTagDetection detection : detections) {
                 if (detection.metadata != null && detection.ftcPose != null) {
-                    telemetry.addLine(String.format(Locale.US, "\n==== Tag ID %d (%s) ====",
-                            detection.id, detection.metadata.name));
-                    telemetry.addLine(String.format(Locale.US, "XYZ %6.1f %6.1f %6.1f  (inch)",
-                            detection.ftcPose.x, detection.ftcPose.y, detection.ftcPose.z));
-                    telemetry.addLine(String.format(Locale.US, "PRY %6.1f %6.1f %6.1f  (deg)",
-                            detection.ftcPose.pitch, detection.ftcPose.roll, detection.ftcPose.yaw));
-                    telemetry.addLine(String.format(Locale.US, "RBE %6.1f %6.1f %6.1f  (inch, deg, deg)",
-                            detection.ftcPose.range, detection.ftcPose.bearing, detection.ftcPose.elevation));
+//                    telemetry.addLine(String.format(Locale.US, "\n==== Tag ID %d (%s) ====",
+//                            detection.id, detection.metadata.name));
+//                    telemetry.addLine(String.format(Locale.US, "XYZ %6.1f %6.1f %6.1f  (inch)",
+//                            detection.ftcPose.x, detection.ftcPose.y, detection.ftcPose.z));
+//                    telemetry.addLine(String.format(Locale.US, "PRY %6.1f %6.1f %6.1f  (deg)",
+//                            detection.ftcPose.pitch, detection.ftcPose.roll, detection.ftcPose.yaw));
+//                    telemetry.addLine(String.format(Locale.US, "RBE %6.1f %6.1f %6.1f  (inch, deg, deg)",
+//                            detection.ftcPose.range, detection.ftcPose.bearing, detection.ftcPose.elevation));
                     bearingVal = detection.ftcPose.bearing;
                     xVal = detection.ftcPose.x;
 
@@ -89,9 +88,9 @@ public class AprilTagTest extends LinearOpMode {
                 }
             }
 
-            telemetry.addLine("\nKey:\nXYZ = Translation");
-            telemetry.addLine("PRY = Pitch, Roll, Yaw (Rotation)");
-            telemetry.addLine("RBE = Range, Bearing, Elevation");
+//            telemetry.addLine("\nKey:\nXYZ = Translation");
+//            telemetry.addLine("PRY = Pitch, Roll, Yaw (Rotation)");
+//            telemetry.addLine("RBE = Range, Bearing, Elevation");
 
             turretCenter();
 
@@ -137,8 +136,8 @@ public class AprilTagTest extends LinearOpMode {
             telemetry.addLine("No tag - stopped");
         } else {
             // Tag detected recently - use proportional control on smoothed bearing
-            double deadband = 5.0;  // Stop when within 3.5 degrees (wider to prevent oscillation)
-            double kP = 0.08;        // Proportional gain (reduced from 0.015)
+            double deadband = 4.0;  // Stop when within 4 degrees
+            double kP = 0.006;      // Proportional gain - lower = gentler movement
 
             if (Math.abs(smoothedBearing) < deadband) {
                 turretServo.setPower(0.0);  // Centered!
@@ -146,25 +145,18 @@ public class AprilTagTest extends LinearOpMode {
                 telemetry.addLine("CENTERED");
             } else {
                 // Proportional control: power proportional to bearing error
-                double power = -kP * smoothedBearing;
+                double power = kP * smoothedBearing;
 
-                // Only add minimum power if we're far from target
-                if (Math.abs(smoothedBearing) > 10.0) {
-                    double minPower = 0.05;  // Reduced from 0.08
+                // Only add minimum power if we're far from target (helps overcome friction)
+                if (Math.abs(smoothedBearing) > 15.0) {
+                    double minPower = 0.04;
                     if (Math.abs(power) > 0 && Math.abs(power) < minPower) {
                         power = Math.signum(power) * minPower;
                     }
                 }
 
-                // Clamp power to reasonable range (reduced max)
-                power = Math.max(-0.15, Math.min(0.15, power));
-
-                // Damping: reduce power change rate to prevent oscillation
-                double maxPowerChange = 0.05;
-                double powerChange = power - lastPower;
-                if (Math.abs(powerChange) > maxPowerChange) {
-                    power = lastPower + Math.signum(powerChange) * maxPowerChange;
-                }
+                // Clamp power to reasonable range
+                power = Math.max(-0.12, Math.min(0.12, power));
 
                 lastPower = power;
                 turretServo.setPower(power);
