@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.subSystems;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 import robotcore.Subsystem;
 
@@ -16,6 +17,7 @@ public class MotorOuttake extends Subsystem {
     public void init(OpMode opMode) {
         instantiateSubsystem(opMode);
         OuttakeMotor = hardwareMap.get(DcMotor.class, "outtake_motor");
+        OuttakeMotor.setDirection(DcMotor.Direction.REVERSE);
     }
 
     public void runOuttake(){
@@ -26,7 +28,7 @@ public class MotorOuttake extends Subsystem {
                 telemetry.addLine("off");
             } else {
                 isOn = true;
-                OuttakeMotor.setPower(0.6);
+                OuttakeMotor.setPower(0.7);
                 telemetry.addLine("on");
             }
         }
