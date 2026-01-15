@@ -29,20 +29,21 @@ public class MotorTransfer extends Subsystem {
         TransferGate = hardwareMap.get(Servo.class,"transfer_gate");
         TransferGate.setDirection(Servo.Direction.REVERSE);
 
-        runtime.reset();
+
     }
 
     public void runTransfer() {
         if (gamepad2.b) {
 
+            if (TransferGate.getPosition() != 1.0){
+                TransferGate.setPosition(1.0);
+                runtime.reset();
+            }
 
-            TransferGate.setPosition(1.0);
-            runtime.reset();
-
-
+            if (runtime.time()>0.5){
+                TransferMotor.setPower(1.0);
 
             telemetry.addLine("on");
-
 
         } else{
             TransferMotor.setPower(0.0);
@@ -52,8 +53,7 @@ public class MotorTransfer extends Subsystem {
         }
 
 
-        if (runtime.time()>0.5){
-            TransferMotor.setPower(1.0);
+
         }
 
     }
