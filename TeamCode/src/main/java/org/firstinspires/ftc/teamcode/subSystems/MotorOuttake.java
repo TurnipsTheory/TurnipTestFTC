@@ -10,25 +10,30 @@ import robotcore.Subsystem;
 public class MotorOuttake extends Subsystem {
 
     boolean isOn;
-    private DcMotor OuttakeMotor = null;
+    private DcMotor OuttakeMotorRight = null;
+    private DcMotor OuttakeMotorLeft = null;
 
 
     @Override
     public void init(OpMode opMode) {
         instantiateSubsystem(opMode);
-        OuttakeMotor = hardwareMap.get(DcMotor.class, "outtake_motor");
-        OuttakeMotor.setDirection(DcMotor.Direction.REVERSE);
+        OuttakeMotorRight = hardwareMap.get(DcMotor.class, "outtake_motor_right");
+        OuttakeMotorRight.setDirection(DcMotor.Direction.REVERSE);
+        OuttakeMotorLeft = hardwareMap.get(DcMotor.class, "outtake_motor_left");
+        OuttakeMotorLeft.setDirection(DcMotor.Direction.FORWARD);
     }
 
     public void runOuttake(){
         if (gamepad2.xWasPressed()) {
             if (isOn) {
                 isOn = false;
-                OuttakeMotor.setPower(0.0);
+                OuttakeMotorRight.setPower(0.0);
+                OuttakeMotorLeft.setPower(0.0);
                 telemetry.addLine("off");
             } else {
                 isOn = true;
-                OuttakeMotor.setPower(0.7);
+                OuttakeMotorRight.setPower(0.8);
+                OuttakeMotorLeft.setPower(0.8);
                 telemetry.addLine("on");
             }
         }
