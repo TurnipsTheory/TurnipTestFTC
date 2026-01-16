@@ -40,11 +40,12 @@ public class MotorTransfer extends Subsystem {
                 runtime.reset();
             }
 
-            if (runtime.time()>0.5){
+            if (runtime.time()>0.5) {
                 TransferMotor.setPower(1.0);
 
-            telemetry.addLine("on");
+                telemetry.addLine("on");
 
+            }
         } else{
             TransferMotor.setPower(0.0);
 
@@ -56,5 +57,5 @@ public class MotorTransfer extends Subsystem {
 
         }
 
-    }
+
 }
