@@ -113,7 +113,7 @@ public class DriveTrainTest extends Subsystem {
         frontLeftDrive.setDirection(DcMotor.Direction.FORWARD);
         backLeftDrive.setDirection(DcMotor.Direction.FORWARD);
         frontRightDrive.setDirection(DcMotor.Direction.FORWARD);
-        backRightDrive.setDirection(DcMotor.Direction.REVERSE);
+        backRightDrive.setDirection(DcMotor.Direction.FORWARD);
 
     // Wait for the game to start (driver presses START)
         telemetry.addData("Status","Initialized");

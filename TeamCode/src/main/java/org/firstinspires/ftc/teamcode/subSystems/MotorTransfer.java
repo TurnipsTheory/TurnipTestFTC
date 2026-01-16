@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.subSystems;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import robotcore.Subsystem;
@@ -18,10 +19,11 @@ public class MotorTransfer extends Subsystem {
     public void init(OpMode opMode) {
         instantiateSubsystem(opMode);
         TransferMotor = hardwareMap.get(DcMotor.class, "transfer_motor");
+        TransferMotor.setDirection(DcMotor.Direction.REVERSE);
     }
 
     public void runTransfer(){
-        if (gamepad1.bWasPressed()) {
+        if (gamepad2.bWasPressed()) {
             if (isOn) {
                 isOn = false;
                 TransferMotor.setPower(0.0);
@@ -32,7 +34,7 @@ public class MotorTransfer extends Subsystem {
                 telemetry.addLine("on");
             }
         }
-        if (gamepad1.left_bumper){
+        if (gamepad2.left_bumper){
             if(revIsOn) {
                 revIsOn = false;
                 TransferMotor.setPower(0.0);

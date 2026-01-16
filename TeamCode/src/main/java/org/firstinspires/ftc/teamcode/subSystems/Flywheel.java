@@ -26,7 +26,7 @@ public class Flywheel extends Subsystem{
     }
 
     public void runFlywheel(){
-        if (gamepad1.bWasPressed()){
+        if (gamepad2.bWasPressed()){
             if (isOn){
                 flywheelLeft.setPower(0.0);
                 flywheelRight.setPower(0.0);

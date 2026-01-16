@@ -18,11 +18,11 @@ public class Intake extends Subsystem {
         instantiateSubsystem(opMode);
 
         intakeMotor = hardwareMap.get(DcMotor.class,"intake_motor");
-        intakeMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+        intakeMotor.setDirection(DcMotorSimple.Direction.FORWARD);
     }
 
     public void runIntake(){
-        if (gamepad1.aWasPressed()) {
+        if (gamepad2.aWasPressed()) {
             if (isOn) {
                 isOn = false;
                 intakeMotor.setPower(0.0);
@@ -34,7 +34,7 @@ public class Intake extends Subsystem {
                 telemetry.addLine("on");
             }
         }
-        if (gamepad1.yWasPressed()) {
+        if (gamepad2.yWasPressed()) {
             if (revIsOn){
                 revIsOn = false;
                 intakeMotor.setPower(0.0);

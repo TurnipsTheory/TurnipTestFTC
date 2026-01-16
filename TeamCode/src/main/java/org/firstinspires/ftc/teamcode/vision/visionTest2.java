@@ -37,7 +37,7 @@ public class visionTest2 extends LinearOpMode {
     int direction = 0;
     CRServo turretServo = hardwareMap.get(CRServo.class, "turret_servo");
     AnalogInput turretEncoder = hardwareMap.get(AnalogInput.class, "turret_servo_encoder");
-    axon = new RTPAxon(turretServo, turretEncoder);
+    //axon = new RTPAxon(turretServo, turretEncoder);
 
 
     public void runOpMode() {
@@ -106,7 +106,7 @@ public class visionTest2 extends LinearOpMode {
             turretServo.setPower(0.0);
         }
         telemetry.addData("running centering of turret #", bearingVal);
-        telemetry.addLine(String.format(Locale.US, "power: %f", power));
+        //telemetry.addLine(String.format(Locale.US, "power: %f", power));
 
 
     }

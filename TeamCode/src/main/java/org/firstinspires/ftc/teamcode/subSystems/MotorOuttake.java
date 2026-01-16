@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.subSystems;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 //import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 //import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
@@ -26,7 +27,8 @@ import robotcore.Subsystem;
 public class MotorOuttake extends Subsystem {
 
     boolean isOn;
-    private DcMotor OuttakeMotor = null;
+    private DcMotor OuttakeMotorRight = null;
+    private DcMotor OuttakeMotorLeft = null;
     private CRServo turretServo = null;
 //    private AprilTagProcessor aprilTag;
 //    List<AprilTagDetection> detection = aprilTag.getDetections();
@@ -35,8 +37,11 @@ public class MotorOuttake extends Subsystem {
     @Override
     public void init(OpMode opMode) {
         instantiateSubsystem(opMode);
-        OuttakeMotor = hardwareMap.get(DcMotor.class, "outtake_motor");
-        turretServo   = hardwareMap.get(CRServo.class, "turret_servo");
+        OuttakeMotorRight = hardwareMap.get(DcMotor.class, "outtake_motor_right");
+        OuttakeMotorRight.setDirection(DcMotor.Direction.REVERSE);
+        OuttakeMotorLeft = hardwareMap.get(DcMotor.class, "outtake_motor_left");
+        OuttakeMotorLeft.setDirection(DcMotor.Direction.FORWARD);
+        turretServo = hardwareMap.get(CRServo.class, "turret_servo");
     }
 
 //    public void turretCenter(){
@@ -52,14 +57,16 @@ public class MotorOuttake extends Subsystem {
 //    }
 
     public void runOuttake(){
-        if (gamepad1.xWasPressed()) {
+        if (gamepad2.xWasPressed()) {
             if (isOn) {
                 isOn = false;
-                OuttakeMotor.setPower(0.0);
+                OuttakeMotorRight.setPower(0.0);
+                OuttakeMotorLeft.setPower(0.0);
                 telemetry.addLine("off");
             } else {
                 isOn = true;
-                OuttakeMotor.setPower(0.6);
+                OuttakeMotorRight.setPower(0.8);
+                OuttakeMotorLeft.setPower(0.8);
                 telemetry.addLine("on");
             }
         }
