@@ -18,9 +18,9 @@ public class MotorOuttake extends Subsystem {
     public void init(OpMode opMode) {
         instantiateSubsystem(opMode);
         OuttakeMotorRight = hardwareMap.get(DcMotor.class, "outtake_motor_right");
-        OuttakeMotorRight.setDirection(DcMotor.Direction.REVERSE);
+        OuttakeMotorRight.setDirection(DcMotor.Direction.FORWARD);
         OuttakeMotorLeft = hardwareMap.get(DcMotor.class, "outtake_motor_left");
-        OuttakeMotorLeft.setDirection(DcMotor.Direction.FORWARD);
+        OuttakeMotorLeft.setDirection(DcMotor.Direction.REVERSE);
     }
 
     public void runOuttake(){
