@@ -1,7 +1,7 @@
 package org.firstinspires.ftc.teamcode.teleOp;
 
 import android.annotation.SuppressLint;
-
+import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -38,6 +38,7 @@ public class RTPAxon {
     private double lastError;
     private double maxIntegralSum;
     private ElapsedTime pidTimer;
+    private double output;  // Store PID output for telemetry
 
     // Initialization and debug fields
     public double STARTPOS;
@@ -95,9 +96,9 @@ public class RTPAxon {
         homeAngle = previousAngle;
 
         // Default PID coefficients
-        kP = 0.015;
-        kI = 0.0005;
-        kD = 0.0025;
+        kP = 0.0;
+        kI = 0.0;
+        kD = 0.0;
         integralSum = 0.0;
         lastError = 0.0;
         maxIntegralSum = 100.0;
@@ -216,6 +217,11 @@ public class RTPAxon {
         return targetRotation;
     }
 
+    // Get current PID output value
+    public double getOutput() {
+        return output;
+    }
+
     // Increment target rotation by a value
     public void changeTargetRotation(double change) {
         targetRotation += change;
@@ -311,7 +317,7 @@ public class RTPAxon {
         double iTerm = kI * integralSum;
         double dTerm = kD * derivative;
 
-        double output = pTerm + iTerm + dTerm;
+        this.output = pTerm + iTerm + dTerm;
 
         // Deadzone for output
         final double DEADZONE = 0.5;
@@ -332,8 +338,8 @@ public class RTPAxon {
                         "Total Rotation: %.2f\n" +
                         "Target Rotation: %.2f\n" +
                         "Current Power: %.3f\n" +
-                        "PID Values: P=%.3f I=%.3f D=%.3f\n" +
-                        "PID Terms: Error=%.2f Integral=%.2f",
+                        "PID Values: P=%.3f I=%.4f D=%.4f\n" +
+                        "PID Terms: Error=%.2f Integral=%.2f Output=%.2f",
                 servoEncoder.getVoltage(),
                 getCurrentAngle(),
                 totalRotation,
@@ -341,7 +347,7 @@ public class RTPAxon {
                 power,
                 kP, kI, kD,
                 targetRotation - totalRotation,
-                integralSum
+                integralSum, getOutput()
         );
     }
 
@@ -352,8 +358,8 @@ public class RTPAxon {
         @Override
         public void runOpMode() throws InterruptedException {
             telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
-            CRServo crservo = hardwareMap.crservo.get("rightHorizSlide");
-            AnalogInput encoder = hardwareMap.get(AnalogInput.class, "rightHorizSlideEncoder");
+            CRServo crservo = hardwareMap.crservo.get("turret_servo");
+            AnalogInput encoder = hardwareMap.get(AnalogInput.class, "turret_servo_encoder");
             GamepadPair gamepads = new GamepadPair(gamepad1, gamepad2);
             RTPAxon servo = new RTPAxon(crservo, encoder);
 
@@ -364,38 +370,54 @@ public class RTPAxon {
                 servo.update();
 
                 // Manual controls for target and PID tuning
-                if (gamepads.isPressed(-1, "dpad_up")) {
+                if (gamepad1.dpadUpWasPressed()) {
                     servo.changeTargetRotation(15);
                 }
-                if (gamepads.isPressed(-1, "dpad_down")) {
+                if (gamepad1.dpadDownWasPressed()) {
                     servo.changeTargetRotation(-15);
                 }
-                if (gamepads.isPressed(-1, "cross")) {
+                if (gamepad1.dpadLeftWasPressed()) {
+                    servo.changeTargetRotation(-60);
+                }
+                if (gamepad1.dpadRightWasPressed()) {
+                    servo.changeTargetRotation(60);
+                }
+                if (gamepad1.aWasPressed()) {
                     servo.setTargetRotation(0);
                 }
 
-                if (gamepads.isPressed(-1, "triangle")) {
+                if (gamepad1.yWasPressed()) {
                     servo.setKP(servo.getKP() + 0.001);
                 }
-                if (gamepads.isPressed(-1, "square")) {
+                if (gamepad1.xWasPressed()) {
                     servo.setKP(Math.max(0, servo.getKP() - 0.001));
                 }
 
-                if (gamepads.isPressed(-1, "right_bumper")) {
+                if (gamepad2.bWasPressed()) {
                     servo.setKI(servo.getKI() + 0.0001);
                 }
-                if (gamepads.isPressed(-1, "left_bumper")) {
+                if (gamepad2.aWasPressed()) {
                     servo.setKI(Math.max(0, servo.getKI() - 0.0001));
                 }
 
-                if (gamepads.isPressed(-1, "touchpad")) {
-                    servo.setKP(0.015);
-                    servo.setKI(0.0005);
-                    servo.setKD(0.0025);
+                if (gamepad2.yWasPressed()) {
+                    servo.setKD(servo.getKD() + 0.0001);
+                }
+                if (gamepad2.xWasPressed()) {
+                    servo.setKD(Math.max(0, servo.getKD() - 0.0001));
+                }
+
+                if (gamepad1.bWasPressed()) {
+                    servo.setKP(0.021);
+                    servo.setKI(0.002);
+                    servo.setKD(0.000);
                     servo.resetPID();
                 }
 
                 telemetry.addData("Starting angle", servo.STARTPOS);
+                telemetry.addData("Reference Point", servo.targetRotation);
+                telemetry.addData("Total Rotation", servo.totalRotation);
+                telemetry.addData("Output", servo.getOutput()*360);
                 telemetry.addLine(servo.log());
                 telemetry.addData("NTRY", servo.ntry);
                 telemetry.update();
