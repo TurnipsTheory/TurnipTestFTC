@@ -410,7 +410,7 @@ public class RTPAxon {
                 if (gamepad1.bWasPressed()) {
                     servo.setKP(0.021);
                     servo.setKI(0.002);
-                    servo.setKD(0.000);
+                    servo.setKD(0.0003);
                     servo.resetPID();
                 }
 

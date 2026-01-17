@@ -28,22 +28,23 @@ import java.util.Locale;
 @TeleOp(name="visionTest2", group="Vision")
 
 public class visionTest2 extends LinearOpMode {
-    private RTPAxon axon;
 
     private VisionPortal visionPortal;
     private AprilTagProcessor aprilTag;
     double bearingVal = 0;
     double xVal = 0;
     int direction = 0;
-    CRServo turretServo = hardwareMap.get(CRServo.class, "turret_servo");
-    AnalogInput turretEncoder = hardwareMap.get(AnalogInput.class, "turret_servo_encoder");
-    //axon = new RTPAxon(turretServo, turretEncoder);
+    private RTPAxon axon = null;
+
+
 
 
     public void runOpMode() {
-        turretServo = hardwareMap.get(CRServo.class, "turret_servo");
         initAprilTag();
-
+        CRServo turretServo = hardwareMap.get(CRServo.class, "turret_servo");
+        AnalogInput turretEncoder = hardwareMap.get(AnalogInput.class, "turret_servo_encoder");
+        axon = new RTPAxon(turretServo, turretEncoder);
+        axon.setPidCoeffs(0.021, 0.002, 0.0003);
 
         telemetry.addData("Status", "Initialized");
         telemetry.update();
@@ -52,63 +53,41 @@ public class visionTest2 extends LinearOpMode {
         while (opModeIsActive()) {
             // Get list of detected AprilTags
             List<AprilTagDetection> detections = aprilTag.getDetections();
+            axon.update();
 //
             telemetry.addData("# AprilTags Detected", detections.size());
-//
+            telemetry.addData("running centering of turret #", bearingVal);
+            telemetry.addData("target rotation", axon.getTargetRotation());
+            telemetry.addData("angle", axon.getCurrentAngle());
+
 //            // Display info for each detected tag
             for (AprilTagDetection detection : detections) {
                 if (detection.metadata != null && detection.ftcPose != null) {
-//                    telemetry.addLine(String.format(Locale.US, "\n==== Tag ID %d (%s) ====",
-//                            detection.id, detection.metadata.name));
-//                    telemetry.addLine(String.format(Locale.US, "XYZ %6.1f %6.1f %6.1f  (inch)",
-//                            detection.ftcPose.x, detection.ftcPose.y, detection.ftcPose.z));
-//                    telemetry.addLine(String.format(Locale.US, "PRY %6.1f %6.1f %6.1f  (deg)",
-//                            detection.ftcPose.pitch, detection.ftcPose.roll, detection.ftcPose.yaw));
-                    telemetry.addLine(String.format(Locale.US, "RBE %6.1f %6.1f %6.1f  (inch, deg, deg)",
-                            detection.ftcPose.range, detection.ftcPose.bearing, detection.ftcPose.elevation));
-                    bearingVal = detection.ftcPose.bearing;
+                    bearingVal = Math.round(detection.ftcPose.bearing*10)/10.0;
                     xVal = detection.ftcPose.x;
-//
                 } else {
                     telemetry.addLine(String.format(Locale.US, "\n==== Unknown Tag ID %d ====", detection.id));
                     telemetry.addLine(String.format(Locale.US, "Center %6.0f %6.0f   (pixels)",
+
                             detection.center.x, detection.center.y));
                 }
             }
-//
-//            telemetry.addLine("\nKey:\nXYZ = Translation");
-//            telemetry.addLine("PRY = Pitch, Roll, Yaw (Rotation)");
-//            telemetry.addLine("RBE = Range, Bearing, Elevation");
-            if (detections.isEmpty()) {
-                turretServo.setDirection(turretServo.getDirection());
-                turretServo.setPower(-0.06);
-                telemetry.addData("searching #", bearingVal);
 
-            }
-            else {
-                turretCenter();
-            }
+        if (aprilTag.getDetections().isEmpty()) {
+            bearingVal = 0.0;
+        }
+        else if (!axon.isAtTarget(0.5)) {
+            axon.changeTargetRotation(bearingVal*3);
+            telemetry.addLine(axon.log());
+        }
             telemetry.update();
         }
 
         // Close the vision portal when done
         visionPortal.close();
-
     }
 
     public void turretCenter() {
-//        power = Math.min(0.6, Math.max(Math.abs(bearingVal/100), 0.06));
-        if (bearingVal < -0.5) {
-            turretServo.setPower(-1.0);
-        } else if (bearingVal > 0.5) {
-            turretServo.setPower(1.0);
-        } else {
-            turretServo.setPower(0.0);
-        }
-        telemetry.addData("running centering of turret #", bearingVal);
-        //telemetry.addLine(String.format(Locale.US, "power: %f", power));
-
-
     }
 
 
