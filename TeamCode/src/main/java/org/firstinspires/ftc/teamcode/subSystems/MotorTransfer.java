@@ -19,7 +19,7 @@ public class MotorTransfer extends Subsystem {
     public void init(OpMode opMode) {
         instantiateSubsystem(opMode);
         TransferMotor = hardwareMap.get(DcMotor.class, "transfer_motor");
-        TransferMotor.setDirection(DcMotor.Direction.REVERSE);
+        TransferMotor.setDirection(DcMotor.Direction.FORWARD);
     }
 
     public void runTransfer(){
