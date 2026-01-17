@@ -29,7 +29,6 @@ public class MotorOuttake extends Subsystem {
     boolean isOn;
     private DcMotor OuttakeMotorRight = null;
     private DcMotor OuttakeMotorLeft = null;
-    private CRServo turretServo = null;
 //    private AprilTagProcessor aprilTag;
 //    List<AprilTagDetection> detection = aprilTag.getDetections();
     //double bearingVal = AprilTagTest.camBearing;
@@ -41,7 +40,6 @@ public class MotorOuttake extends Subsystem {
         OuttakeMotorRight.setDirection(DcMotor.Direction.REVERSE);
         OuttakeMotorLeft = hardwareMap.get(DcMotor.class, "outtake_motor_left");
         OuttakeMotorLeft.setDirection(DcMotor.Direction.FORWARD);
-        turretServo = hardwareMap.get(CRServo.class, "turret_servo");
     }
 
 //    public void turretCenter(){

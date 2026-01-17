@@ -390,9 +390,14 @@ public class RTPAxon {
                     servo.setKP(servo.getKP() + 0.001);
                 }
                 if (gamepad1.xWasPressed()) {
-                    servo.setKP(Math.max(0, servo.getKP() - 0.001));
+                    servo.setKP(Math.max(0, servo.getKP() - 0.02));
                 }
-
+                if (gamepad1.rightBumperWasPressed()) {
+                    servo.setKP(servo.getKP() + 0.001);
+                }
+                if (gamepad1.leftBumperWasPressed()) {
+                    servo.setKP(Math.max(0, servo.getKP() - 0.02));
+                }
                 if (gamepad2.bWasPressed()) {
                     servo.setKI(servo.getKI() + 0.0001);
                 }
