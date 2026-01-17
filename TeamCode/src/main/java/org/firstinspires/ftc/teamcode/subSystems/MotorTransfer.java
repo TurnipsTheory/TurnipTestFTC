@@ -19,11 +19,11 @@ public class MotorTransfer extends Subsystem {
     public void init(OpMode opMode) {
         instantiateSubsystem(opMode);
         TransferMotor = hardwareMap.get(DcMotor.class, "transfer_motor");
-        TransferMotor.setDirection(DcMotor.Direction.FORWARD);
+        TransferMotor.setDirection(DcMotor.Direction.REVERSE);
     }
 
     public void runTransfer(){
-        if (gamepad1.b) {
+        if (gamepad2.b) {
                 TransferMotor.setPower(1.0);
                 telemetry.addLine("on");
             } else {

@@ -30,16 +30,17 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 //@com.qualcomm.robotcore.eventloop.opmode.Autonomous(name = "SampleAuto")
 public class Auton extends LinearOpMode {
 
-    DcMotor frontLeft;
-    DcMotor frontRight;
-    DcMotor backLeft;
-    DcMotor backRight;
+    DcMotor frontLeftDrive;
+    DcMotor frontRightDrive;
+    DcMotor backLeftDrive;
+    DcMotor backRightDrive;
     //    private DcMotor shooterMotor = null;
 //    private Servo intakeServo = null; // Example for an intake/indexing servo
     private ElapsedTime runtime = new ElapsedTime();
     DcMotor intakeMotor;
     DcMotor TransferMotor;
-    DcMotor OuttakeMotor;
+    private DcMotor OuttakeMotorRight = null;
+    private DcMotor OuttakeMotorLeft = null;
 
     boolean intakeOn = false;
     boolean shootingOn = false;
@@ -85,15 +86,23 @@ public class Auton extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException{
 
-        frontLeft  = hardwareMap.get(DcMotor.class, "leftFront");
-        frontRight = hardwareMap.get(DcMotor.class, "rightFront");
-        backLeft   = hardwareMap.get(DcMotor.class, "leftBack");
-        backRight  = hardwareMap.get(DcMotor.class, "rightBack");
+        frontLeftDrive  = hardwareMap.get(DcMotor.class, "leftFront");
+        frontRightDrive = hardwareMap.get(DcMotor.class, "rightFront");
+        backLeftDrive   = hardwareMap.get(DcMotor.class, "leftBack");
+        backRightDrive= hardwareMap.get(DcMotor.class, "rightBack");
         intakeMotor = hardwareMap.get(DcMotor.class,"intake_motor");
         TransferMotor = hardwareMap.get(DcMotor.class, "transfer_motor");
-        OuttakeMotor = hardwareMap.get(DcMotor.class, "outtake_motor");
-        intakeMotor.setDirection(DcMotorSimple.Direction.REVERSE);
-        backRight.setDirection(DcMotorSimple.Direction.REVERSE);
+        OuttakeMotorRight = hardwareMap.get(DcMotor.class, "outtake_motor_right");
+        OuttakeMotorLeft = hardwareMap.get(DcMotor.class, "outtake_motor_left");
+
+        frontLeftDrive.setDirection(DcMotor.Direction.FORWARD);
+        backLeftDrive.setDirection(DcMotor.Direction.FORWARD);
+        frontRightDrive.setDirection(DcMotor.Direction.REVERSE);
+        backRightDrive.setDirection(DcMotor.Direction.REVERSE);
+        intakeMotor.setDirection(DcMotorSimple.Direction.FORWARD);
+        TransferMotor.setDirection(DcMotor.Direction.REVERSE);
+        OuttakeMotorRight.setDirection(DcMotor.Direction.REVERSE);
+        OuttakeMotorLeft.setDirection(DcMotor.Direction.FORWARD);
 
 //        private ElapsedTime runtime = new ElapsedTime();
 //        // Constants for encoder calculations (YOU MUST TUNE THESE VALUES)
@@ -111,32 +120,34 @@ public class Auton extends LinearOpMode {
 
         waitForStart();
 
-        frontRight.setPower(-1.0);
-        frontLeft.setPower(-1.0);
-        backLeft.setPower(-1.0);
-        backRight.setPower(-1.0);
-        OuttakeMotor.setPower(0.55);
+        frontRightDrive.setPower(-1.0);
+        frontLeftDrive.setPower(-1.0);
+        backLeftDrive.setPower(-1.0);
+        backRightDrive.setPower(-1.0);
+        OuttakeMotorRight.setPower(0.8);
+        OuttakeMotorLeft.setPower(0.8);
         sleep(615);
-        frontRight.setPower(0.0);
-        frontLeft.setPower(0.0);
-        backLeft.setPower(0.0);
-        backRight.setPower(0.0);
+        frontRightDrive.setPower(0.0);
+        frontLeftDrive.setPower(0.0);
+        backLeftDrive.setPower(0.0);
+        backRightDrive.setPower(0.0);
 //        //RED: Strafe RIGHT  BLUE: Strafe LEFT
 //        frontRight.setPower(-1.0);  //RED: +  BLUE: -
 //        frontLeft.setPower(1.0);  //RED: -  BLUE: +
 //        backRight.setPower(1.0);  //RED: +  BlUE: -
 //        backLeft.setPower(-1.0);    //RED: -  BLUE: +
 //        sleep(300);
-        frontRight.setPower(0.0);
-        frontLeft.setPower(0.0);
-        backRight.setPower(0.0);
-        backLeft.setPower(0.0);
+        frontRightDrive.setPower(0.0);
+        frontLeftDrive.setPower(0.0);
+        backRightDrive.setPower(0.0);
+        backLeftDrive.setPower(0.0);
         sleep(1000);
         TransferMotor.setPower(1.0);
-        sleep(750);
+        //sleep(750);
         intakeMotor.setPower(1.0);
         sleep(10000);
-        OuttakeMotor.setPower(0.0);
+        OuttakeMotorRight.setPower(0.0);
+        OuttakeMotorLeft.setPower(0.0);
         intakeMotor.setPower(0.0);
         TransferMotor.setPower(0.0);
 
