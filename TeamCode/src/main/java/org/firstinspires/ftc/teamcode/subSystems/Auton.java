@@ -120,12 +120,12 @@ public class Auton extends LinearOpMode {
 
         waitForStart();
 
-        frontRightDrive.setPower(-1.0);
-        frontLeftDrive.setPower(-1.0);
-        backLeftDrive.setPower(-1.0);
-        backRightDrive.setPower(-1.0);
-        OuttakeMotorRight.setPower(0.8);
-        OuttakeMotorLeft.setPower(0.8);
+        frontRightDrive.setPower(-0.65);
+        frontLeftDrive.setPower(-0.65);
+        backLeftDrive.setPower(-0.65);
+        backRightDrive.setPower(-0.65);
+//        OuttakeMotorRight.setPower(0.8);
+//        OuttakeMotorLeft.setPower(0.8);
         sleep(615);
         frontRightDrive.setPower(0.0);
         frontLeftDrive.setPower(0.0);
@@ -137,7 +137,7 @@ public class Auton extends LinearOpMode {
 //        backRight.setPower(1.0);  //RED: +  BlUE: -
 //        backLeft.setPower(-1.0);    //RED: -  BLUE: +
 //        sleep(300);
-        frontRightDrive.setPower(0.0);
+        /*frontRightDrive.setPower(0.0);
         frontLeftDrive.setPower(0.0);
         backRightDrive.setPower(0.0);
         backLeftDrive.setPower(0.0);
@@ -149,7 +149,7 @@ public class Auton extends LinearOpMode {
         OuttakeMotorRight.setPower(0.0);
         OuttakeMotorLeft.setPower(0.0);
         intakeMotor.setPower(0.0);
-        TransferMotor.setPower(0.0);
+        TransferMotor.setPower(0.0);*/
 
 //        //starting pose
 //        Pose2d beginPose = new Pose2d(new Vector2d(55,50), Math.toRadians(315));

@@ -73,8 +73,15 @@ public class Turret extends Subsystem {
         else if (!manuel && Math.abs(bearingVal) > 2.5 && !moving && Math.abs(axon.getTotalRotation()/3 - bearingVal)< 60) {
             axon.changeTargetRotation(bearingVal * -3);
             moving = true;
-        } else if (!manuel && axon.isAtTarget(2.5)) {
+        } else if (!manuel && axon.isAtTarget(2.8)) {
             moving = false;
+        }
+        else if (gamepad2.leftBumperWasPressed()){
+            moving = false;
+            if(manuel){
+                manuel = false;
+            }
+            axon.setPower(0.0);
         }
 //    // Close the vision portal when done
 //    visionPortal.close();

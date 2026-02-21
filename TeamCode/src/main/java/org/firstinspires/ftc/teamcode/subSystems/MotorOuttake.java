@@ -1,9 +1,14 @@
 package org.firstinspires.ftc.teamcode.subSystems;
 
+import com.acmerobotics.roadrunner.ftc.PositionVelocityPair;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.acmerobotics.roadrunner.ftc.Encoder;
+import com.acmerobotics.roadrunner.ftc.RawEncoder;
+import com.acmerobotics.roadrunner.ftc.OverflowEncoder;
 
 
 //import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
@@ -13,7 +18,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 //import java.util.List;
 //
 //import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-//import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 //
 //import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 //import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
@@ -22,14 +27,18 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 //
 //import java.util.Locale;
 
+import java.util.Locale;
+
 import robotcore.Subsystem;
 
 
 public class MotorOuttake extends Subsystem {
 
     boolean isOn;
-    private DcMotor OuttakeMotorRight = null;
-    private DcMotor OuttakeMotorLeft = null;
+    public DcMotor OuttakeMotorRight = null;
+    public DcMotor OuttakeMotorLeft = null;
+
+
 //    private AprilTagProcessor aprilTag;
 //    List<AprilTagDetection> detection = aprilTag.getDetections();
     //double bearingVal = AprilTagTest.camBearing;
@@ -37,13 +46,14 @@ public class MotorOuttake extends Subsystem {
     @Override
     public void init(OpMode opMode) {
         instantiateSubsystem(opMode);
-        OuttakeMotorRight = hardwareMap.get(DcMotor.class, "outtake_motor_right");
+        OuttakeMotorRight = hardwareMap.get(DcMotorEx.class, "outtake_motor_right");
         OuttakeMotorRight.setDirection(DcMotor.Direction.REVERSE);
-        OuttakeMotorLeft = hardwareMap.get(DcMotor.class, "outtake_motor_left");
+        OuttakeMotorLeft = hardwareMap.get(DcMotorEx.class, "outtake_motor_left");
         OuttakeMotorLeft.setDirection(DcMotor.Direction.FORWARD);
+        //OuttakeMotorLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
 
-//    public void turretCenter(){
+    //    public void turretCenter(){
 //        if(bearingVal < 0){
 //            turretServo.setPower(1.0);
 //        }
@@ -54,8 +64,25 @@ public class MotorOuttake extends Subsystem {
 //            turretServo.setPower(0.0);
 //        }
 //    }
+    public void loop() {
 
-    public void runOuttake(){
+    }
+    public void runOuttake() {
+
+        double power = 0.65;
+        if(gamepad1.rightBumperWasPressed()){
+            power += 0.1;
+            if(power > 1.0){
+                power = 1.0;
+            }
+        }
+        else if(gamepad1.leftBumperWasPressed()){
+            power -= 0.1;
+            if(power < 0.0){
+                power = 0.0;
+            }
+        }
+        telemetry.addData("Flywheel Power: ", power);
         if (gamepad2.xWasPressed()) {
             if (isOn) {
                 isOn = false;
@@ -64,13 +91,12 @@ public class MotorOuttake extends Subsystem {
                 telemetry.addLine("off");
             } else {
                 isOn = true;
-                OuttakeMotorRight.setPower(0.7);
-                OuttakeMotorLeft.setPower(0.7);
+                OuttakeMotorRight.setPower(power);
+                OuttakeMotorLeft.setPower(power);
                 telemetry.addLine("on");
             }
         }
-
-
-
     }
 }
+
+
