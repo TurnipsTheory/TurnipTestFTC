@@ -44,7 +44,7 @@ public class Turret extends Subsystem {
 
         telemetry.addData("# AprilTags Detected", detections.size());
         telemetry.addData("manuel", manuel);
-        telemetry.update();
+        //telemetry.update();
 
         //            // Display info for each detected tag
         for (AprilTagDetection detection : detections) {

@@ -64,12 +64,8 @@ public class MotorOuttake extends Subsystem {
 //            turretServo.setPower(0.0);
 //        }
 //    }
-    public void loop() {
-
-    }
+    double power = 0.65;
     public void runOuttake() {
-
-        double power = 0.65;
         if(gamepad1.rightBumperWasPressed()){
             power += 0.1;
             if(power > 1.0){
@@ -83,6 +79,7 @@ public class MotorOuttake extends Subsystem {
             }
         }
         telemetry.addData("Flywheel Power: ", power);
+
         if (gamepad2.xWasPressed()) {
             if (isOn) {
                 isOn = false;

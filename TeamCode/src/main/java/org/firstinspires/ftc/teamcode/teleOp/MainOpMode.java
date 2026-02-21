@@ -35,6 +35,6 @@ public class MainOpMode extends OpMode {
         Intake.runIntake();
         MotorOuttake.runOuttake();
         MotorTransfer.runTransfer();
-
+        telemetry.update();
     }
 }
