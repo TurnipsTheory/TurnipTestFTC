@@ -64,16 +64,16 @@ public class MotorOuttake extends Subsystem {
 //            turretServo.setPower(0.0);
 //        }
 //    }
-    double power = 0.53;
+    double power = 0.65;
     public void runOuttake() {
         if(gamepad1.rightBumperWasPressed()){
-            power += 0.01;
+            power += 0.1;
             if(power > 1.0){
                 power = 1.0;
             }
         }
         else if(gamepad1.leftBumperWasPressed()){
-            power -= 0.01;
+            power -= 0.1;
             if(power < 0.0){
                 power = 0.0;
             }
