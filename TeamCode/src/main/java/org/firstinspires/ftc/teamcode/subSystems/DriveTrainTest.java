@@ -73,7 +73,7 @@ import robotcore.Subsystem;
 
 public class DriveTrainTest extends Subsystem {
 
-
+    double SLEW_RATE = 0.03;
     // Declare OpMode members for each of the 4 motors.
     private ElapsedTime runtime = new ElapsedTime();
     private DcMotor frontLeftDrive = null;
@@ -123,34 +123,56 @@ public class DriveTrainTest extends Subsystem {
     }
         // run until the end of the match (driver presses STOP)
 
+        public double slewControl(double target, double curret){
+            double output = target;
+            if(target >= (curret + SLEW_RATE)){
+                output = curret + SLEW_RATE;
+            }
+            else if (target <= (curret + SLEW_RATE)){
+                output = curret - SLEW_RATE;
+            }
+            if (output > 1.0){
+                output = 1.0;
+            }
+            else if (output < -1.0){
+                output = -1.0;
+            }
+
+            return output;
+        }
+    double frontLeftPower  = 0.0;
+    double frontRightPower = 0.0;
+    double backLeftPower   = 0.0;
+    double backRightPower  = 0.0;
         public void mecanumDrive(){
+
             double max;
 
-            // POV Mode uses left joystick to go forward & strafe, and right joystick to rotate.
-            //double axial   = -gamepad1.left_stick_y;  // Note: pushing stick forward gives negative value
-            double axial =   -gamepad1.left_stick_y;
+            // POV Mode uses left joystick to go forward & strafe, and right joystick to rotate
+            double axial =   -gamepad1.left_stick_y; //Note: pushing stick forward gives negative value
             double lateral =  gamepad1.left_stick_x;
             double yaw     =  gamepad1.right_stick_x;
 
+
             // Combine the joystick requests for each axis-motion to determine each wheel's power.
             // Set up a variable for each drive wheel to save the power level for telemetry.
-            double frontLeftPower  = axial + lateral + yaw;
-            double frontRightPower = axial - lateral - yaw;
-            double backLeftPower   = axial - lateral + yaw;
-            double backRightPower  = axial + lateral - yaw;
+            frontLeftPower  = slewControl((axial + lateral + yaw), frontLeftPower);
+            frontRightPower = slewControl((axial - lateral - yaw), frontRightPower);
+            backLeftPower   = slewControl((axial - lateral + yaw), backLeftPower);
+            backRightPower  = slewControl((axial + lateral - yaw), backRightPower);
 
             // Normalize the values so no wheel power exceeds 100%
             // This ensures that the robot maintains the desired motion.
-            max = Math.max(Math.abs(frontLeftPower), Math.abs(frontRightPower));
-            max = Math.max(max, Math.abs(backLeftPower));
-            max = Math.max(max, Math.abs(backRightPower));
-
-            if (max > 1.0) {
-                frontLeftPower  /= max;
-                frontRightPower /= max;
-                backLeftPower   /= max;
-                backRightPower  /= max;
-            }
+//            max = Math.max(Math.abs(frontLeftPower), Math.abs(frontRightPower));
+//            max = Math.max(max, Math.abs(backLeftPower));
+//            max = Math.max(max, Math.abs(backRightPower));
+//
+//            if (max > 1.0) {
+//                frontLeftPower  /= max;
+//                frontRightPower /= max;
+//                backLeftPower   /= max;
+//                backRightPower  /= max;
+//            }
 
             // This is test code:
             //
@@ -162,12 +184,6 @@ public class DriveTrainTest extends Subsystem {
             //      the setDirection() calls above.
             // Once the correct motors move in the correct direction re-comment this code.
 
-            /*
-            frontLeftPower  = gamepad1.x ? 1.0 : 0.0;  // X gamepad
-            backLeftPower   = gamepad1.a ? 1.0 : 0.0;  // A gamepad
-            frontRightPower = gamepad1.y ? 1.0 : 0.0;  // Y gamepad
-            backRightPower  = gamepad1.b ? 1.0 : 0.0;  // B gamepad
-            */
 
             // Send calculated power to wheels
             frontLeftDrive.setPower(frontLeftPower);

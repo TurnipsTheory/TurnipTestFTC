@@ -24,7 +24,7 @@ public class Turret extends Subsystem {
     double bearingVal = 0;
     private RTPAxon axon = null;
     boolean moving = false;
-    boolean manuel = false;
+    boolean manuel = true;
 
     @Override
     public void init(OpMode opMode) {

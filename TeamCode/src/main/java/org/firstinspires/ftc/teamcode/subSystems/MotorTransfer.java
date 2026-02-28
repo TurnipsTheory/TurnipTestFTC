@@ -34,7 +34,7 @@ public class MotorTransfer extends Subsystem {
         PositionVelocityPair velocityFlywheel = FlywheelVelocity.getPositionAndVelocity();
         double current_velocity = velocityFlywheel.velocity;
         telemetry.addData("Motor Velocity: Ticks/Sec", current_velocity);
-        double target_velocity = 0;
+        double target_velocity = 2300;
         if (current_velocity <= target_velocity) {
             ready = false;
             TransferMotor.setPower(0.0);
