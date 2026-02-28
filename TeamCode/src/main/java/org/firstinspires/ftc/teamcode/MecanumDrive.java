@@ -67,19 +67,19 @@ public final class MecanumDrive {
         // TODO: fill in these values based on
         //   see https://ftc-docs.firstinspires.org/en/latest/programming_resources/imu/imu.html?highlight=imu#physical-hub-mounting
         public RevHubOrientationOnRobot.LogoFacingDirection logoFacingDirection =
-                RevHubOrientationOnRobot.LogoFacingDirection.RIGHT;
+                RevHubOrientationOnRobot.LogoFacingDirection.BACKWARD;
         public RevHubOrientationOnRobot.UsbFacingDirection usbFacingDirection =
-                RevHubOrientationOnRobot.UsbFacingDirection.BACKWARD;
+                RevHubOrientationOnRobot.UsbFacingDirection.UP;
 
         // drive model parameters
-        public double inPerTick = 0.00052720;
-        public double lateralInPerTick = 0.004075;
-        public double trackWidthTicks = 23679.4;
+        public double inPerTick = 0.001045; //0.0005250; //**
+        public double lateralInPerTick = 0.0007416; //0.00032301; //**
+        public double trackWidthTicks = 20409.2435; //368441.754; //**  //23679.4
 
         // feedforward parameters (in tick units)
-        public double kS = 1.073965;
-        public double kV = 0.0001026324;
-        public double kA = 0.000015;
+        public double kS = 1.080983; //1.21182; //might need to retest
+        public double kV = 0.00009817; //0.000096608; //might need to retest
+        public double kA = 0.000013; //0.000015
 
         // path profile parameters (in inches)
         public double maxWheelVel = 50;
@@ -91,9 +91,9 @@ public final class MecanumDrive {
         public double maxAngAccel = Math.PI;
 
         // path controller gains
-        public double axialGain = 4.0;
-        public double lateralGain = 100.0;
-        public double headingGain = 4.0; // shared with turn
+        public double axialGain = 2.0;
+        public double lateralGain = 2.0;
+        public double headingGain = 1.0; // shared with turn
 
         public double axialVelGain = 0.0;
         public double lateralVelGain = 0.0;
@@ -147,7 +147,8 @@ public final class MecanumDrive {
             imu = lazyImu.get();
 
             // TODO: reverse encoders if needed
-            leftFront.setDirection(DcMotorSimple.Direction.REVERSE);
+            rightFront.setDirection(DcMotorSimple.Direction.REVERSE);
+            rightBack.setDirection(DcMotorSimple.Direction.REVERSE);
             
             this.pose = pose;
         }
@@ -245,8 +246,7 @@ public final class MecanumDrive {
         rightFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         // TODO: reverse motor directions if needed
-       // leftFront.setDirection(DcMotorSimple.Direction.REVERSE);
-
+        rightFront.setDirection(DcMotorSimple.Direction.REVERSE); //leftFront
         rightBack.setDirection(DcMotorSimple.Direction.REVERSE);
 
         // TODO: make sure your config has an IMU with this name (can be BNO or BHI)
@@ -256,8 +256,8 @@ public final class MecanumDrive {
 
         voltageSensor = hardwareMap.voltageSensor.iterator().next();
 
-        localizer = new ThreeDeadWheelLocalizer(hardwareMap, PARAMS.inPerTick, pose);
-
+        //localizer = new ThreeDeadWheelLocalizer(hardwareMap, PARAMS.inPerTick, pose);
+        localizer = new TwoDeadWheelLocalizer(hardwareMap, lazyImu.get(), PARAMS.inPerTick, pose);
         FlightRecorder.write("MECANUM_PARAMS", PARAMS);
     }
 
