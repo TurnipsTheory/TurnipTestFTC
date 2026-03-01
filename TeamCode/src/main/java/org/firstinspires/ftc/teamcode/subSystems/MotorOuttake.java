@@ -78,7 +78,8 @@ public class MotorOuttake extends Subsystem {
                 output = output / 32767.0;
                 output = Math.max(-1, Math.min(1, output));
 
-                OuttakeMotorRight.setPower(output);
+                //power: 0.53
+                OuttakeMotorLeft.setPower(output);
                 OuttakeMotorRight.setPower(-1*output);
                 telemetry.addLine("on");
             }

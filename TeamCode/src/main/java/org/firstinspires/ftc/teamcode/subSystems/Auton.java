@@ -5,9 +5,11 @@ import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.SequentialAction;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.acmerobotics.roadrunner.ftc.Actions;
+import com.acmerobotics.roadrunner.ftc.PositionVelocityPair;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -28,7 +30,7 @@ public class Auton extends LinearOpMode {
     DcMotor intakeMotor;
     DcMotor TransferMotor;
     private DcMotor OuttakeMotorRight = null;
-    private DcMotor OuttakeMotorLeft = null;
+    private DcMotorEx OuttakeMotorLeft = null;
 
     boolean intakeOn = false;
     boolean shootingOn = false;
@@ -48,21 +50,47 @@ public class Auton extends LinearOpMode {
         }
     }
 
+    boolean ready = false;
+    public class startTransferStop implements InstantFunction{
+        double current_velocity = OuttakeMotorLeft.getVelocity();
+        double target_velocity = 2300;
+
+        @Override
+        public void run(){
+            sleep(1500);
+            if (current_velocity <= target_velocity) {
+                ready = false;
+                TransferMotor.setPower(0.0);
+            }
+        }
+    }
+    public class transferStop implements InstantFunction{
+        double current_velocity = OuttakeMotorLeft.getVelocity();
+        double target_velocity = 2300;
+
+        @Override
+        public void run(){
+            sleep(1000);
+            if (current_velocity <= target_velocity) {
+                ready = false;
+                TransferMotor.setPower(0.0);
+            }
+        }
+    }
     public class shooting implements  InstantFunction{
 
         @Override
         public void run(){
-            if (!shootingOn){
-                shootingOn = false;
+            if(!shootingOn) {
                 OuttakeMotorRight.setPower(0.53);
                 OuttakeMotorLeft.setPower(0.53);
+                ready = true;
                 ElapsedTime outtakeTimer = new ElapsedTime();
-                if (outtakeTimer.time() >= 500){
+                if (outtakeTimer.time() >= 1000) {
                     TransferMotor.setPower(1.0);
                 }
                 ElapsedTime shootingTimer = new ElapsedTime();
-            }
-            else{
+            }else{
                 shootingOn = true;
                 OuttakeMotorRight.setPower(0.0);
                 OuttakeMotorLeft.setPower(0.0);
@@ -83,7 +111,7 @@ public class Auton extends LinearOpMode {
         intakeMotor = hardwareMap.get(DcMotor.class,"intake_motor");
         TransferMotor = hardwareMap.get(DcMotor.class, "transfer_motor");
         OuttakeMotorRight = hardwareMap.get(DcMotor.class, "outtake_motor_right");
-        OuttakeMotorLeft = hardwareMap.get(DcMotor.class, "outtake_motor_left");
+        OuttakeMotorLeft = hardwareMap.get(DcMotorEx.class, "outtake_motor_left");
 
         frontLeftDrive.setDirection(DcMotor.Direction.FORWARD);
         backLeftDrive.setDirection(DcMotor.Direction.FORWARD);
@@ -151,13 +179,52 @@ public class Auton extends LinearOpMode {
         //Auton Path
         Action path = drive.actionBuilder(beginPose)
                 //test Auton
-                .splineTo(new Vector2d(26.5,11), Math.toRadians(315))
+                .lineToXConstantHeading(15)
+                //.lineToYConstantHeading(11)
+                //.splineTo(new Vector2d(26.5,11), Math.toRadians(315))
                 //.splineToLinearHeading(26.5,11)
-                .stopAndAdd(new shooting())
-                .stopAndAdd(new runIntake())
+//                .stopAndAdd(new shooting())
+//                .stopAndAdd(new startTransferStop())
+//                .stopAndAdd(new runIntake())
                 .build();
         Actions.runBlocking(new SequentialAction((path)));
+
+        sleep(2000);
+        OuttakeMotorLeft.setPower(0.53);
+        OuttakeMotorRight.setPower(0.53);
+        sleep(2000);
+        TransferMotor.setPower(1.0);
+        sleep(100);
+        TransferMotor.setPower(0.0);
+        intakeMotor.setPower(0.5);
+        sleep(1000);
+        intakeMotor.setPower(0.0);
+        TransferMotor.setPower(1.0);
+        sleep(100);
+        TransferMotor.setPower(0.0);
+        intakeMotor.setPower(0.5);
+        sleep(1000);
+        TransferMotor.setPower(1.0);
+        sleep(1000);
         intakeMotor.setPower(0.0);
         TransferMotor.setPower(0.0);
+        OuttakeMotorRight.setPower(0.0);
+        OuttakeMotorLeft.setPower(0.0);
+
+        //RED: Strafe RIGHT  BLUE: Strafe LEFT
+        frontRightDrive.setPower(1.0);  //RED: +  BLUE: -
+        frontLeftDrive.setPower(-1.0);  //RED: -  BLUE: +
+        backRightDrive.setPower(-1.0);  //RED: +  BlUE: -
+        backLeftDrive.setPower(1.0);    //RED: -  BLUE: +
+        sleep(500);
+        frontRightDrive.setPower(0.0);
+        frontLeftDrive.setPower(0.0);
+        backRightDrive.setPower(0.0);
+        backLeftDrive.setPower(0.0);
+//        Action path2 = drive.actionBuilder(beginPose)
+//                .turnTo(225)
+//                .lineToXConstantHeading(7)
+//                .build();
+//        Actions.runBlocking(new SequentialAction((path2)));
     }
 }
