@@ -24,26 +24,26 @@ android {
 //    }
 
     packagingOptions {
-//        jniLibs {
-//            pickFirsts += ['**/*.so']
-//        }
+        jniLibs {
+            pickFirsts += ['**/*.so']
+        }
 
 
         jniLibs.useLegacyPackaging true
     }
 }
 
-//repositories {
-//    maven {
-//        url = 'https://maven.brott.dev/'
-//    }
+repositories {
+    maven {
+        url = 'https://maven.brott.dev/'
+    }
 //    maven {
 //        url = "https://mymaven.bylazar.com/releases"
 //    }
-//}
+}
 
 dependencies {
     implementation project(':FtcRobotController')
-//    implementation "com.acmerobotics.dashboard:dashboard:0.5.1"
+    implementation "com.acmerobotics.dashboard:dashboard:0.5.1"
 //    implementation 'org.openftc:easyopencv:1.7.3'
 }
