@@ -3,16 +3,21 @@ package org.firstinspires.ftc.teamcode.auton.pedroPathing;
 import static org.firstinspires.ftc.teamcode.auton.pedroPathing.Tuning.changes;
 import static org.firstinspires.ftc.teamcode.auton.pedroPathing.Tuning.drawCurrent;
 import static org.firstinspires.ftc.teamcode.auton.pedroPathing.Tuning.drawCurrentAndHistory;
+import static org.firstinspires.ftc.teamcode.auton.pedroPathing.Drawing.quarterCircle;
 import static org.firstinspires.ftc.teamcode.auton.pedroPathing.Tuning.follower;
 import static org.firstinspires.ftc.teamcode.auton.pedroPathing.Tuning.stopRobot;
 import static org.firstinspires.ftc.teamcode.auton.pedroPathing.Tuning.telemetryM;
 
+import com.acmerobotics.dashboard.canvas.Canvas;
+import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.bylazar.configurables.PanelsConfigurables;
 import com.bylazar.configurables.annotations.Configurable;
 import com.bylazar.configurables.annotations.IgnoreConfigurable;
+import com.bylazar.field.CanvasRotation;
 import com.bylazar.field.FieldManager;
 import com.bylazar.field.PanelsField;
 import com.bylazar.field.Style;
+import com.bylazar.panels.Panels;
 import com.bylazar.telemetry.PanelsTelemetry;
 import com.bylazar.telemetry.TelemetryManager;
 import com.pedropathing.follower.Follower;
@@ -24,6 +29,7 @@ import com.pedropathing.util.*;
 import static com.pedropathing.math.MathFunctions.quadraticFit;
 
 import android.annotation.SuppressLint;
+import android.graphics.Point;
 
 import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
@@ -33,6 +39,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 /**
  * This is the Tuning class. It contains a selection menu for various tuning OpModes.
@@ -144,7 +151,7 @@ class LocalizationTest extends OpMode {
 
     @Override
     public void init() {
-        follower.setStartingPose(new Pose(72,72));
+        follower.setStartingPose(new Pose(36,36));
     }
 
     /** This initializes the PoseUpdater, the drive motors, and the Panels telemetry. */
@@ -1285,7 +1292,9 @@ class CentripetalTuner extends OpMode {
     @Override
     public void loop() {
         follower.update();
-        drawCurrentAndHistory();
+//        drawCurrentAndHistory();
+        Drawing.drawDebug(follower); //handles path, current, AND history maybe??
+
         if (!follower.isBusy()) {
             if (forward) {
                 forward = false;
@@ -1295,7 +1304,12 @@ class CentripetalTuner extends OpMode {
                 follower.followPath(forwards);
             }
         }
-
+//        Canvas canvas = new Canvas();
+//        canvas.setTranslation(0.0, 0.0).setRotation(0.0);
+//        canvas.strokeCircle(0.0,0.0, DISTANCE);
+//        Panels.
+//
+//        telemetryM.debug(canvas);
         telemetryM.debug("Driving away from the origin along the curve?: " + forward);
         telemetryM.update(telemetry);
     }
@@ -1662,6 +1676,9 @@ class Drawing {
     private static final Style historyLook = new Style(
             "", "#4CAF50", 0.75
     );
+    private static final Style myLook = new Style(
+            "", "#FF0000", 0.75
+    );
 
     /**
      * This prepares Panels Field for using Pedro Offsets
@@ -1678,7 +1695,7 @@ class Drawing {
      */
     public static void drawDebug(Follower follower) {
         if (follower.getCurrentPath() != null) {
-            drawPath(follower.getCurrentPath(), robotLook);
+            drawPath(follower.getCurrentPath(), myLook);
             Pose closestPoint = follower.getPointFromPath(follower.getCurrentPath().getClosestPointTValue());
             drawRobot(new Pose(closestPoint.getX(), closestPoint.getY(), follower.getCurrentPath().getHeadingGoal(follower.getCurrentPath().getClosestPointTValue())), robotLook);
         }
@@ -1787,6 +1804,11 @@ class Drawing {
     /**
      * This tries to send the current packet to FTControl Panels.
      */
+
+    public static void quarterCircle (Path path) {
+        drawPath(path, myLook);
+        sendPacket();
+    }
     public static void sendPacket() {
         panelsField.update();
     }
