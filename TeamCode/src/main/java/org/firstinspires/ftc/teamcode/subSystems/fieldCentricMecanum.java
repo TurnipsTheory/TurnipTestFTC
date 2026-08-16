@@ -4,6 +4,7 @@ package org.firstinspires.ftc.teamcode.subSystems;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
@@ -15,6 +16,8 @@ import robotcore.Subsystem;
 
 import java.util.Locale;
 
+import com.acmerobotics.dashboard.config.Config;
+@Config //so we can tune using the FTC dashboard
 public class fieldCentricMecanum extends Subsystem{
     private Telemetry telemetry;
 
@@ -22,7 +25,13 @@ public class fieldCentricMecanum extends Subsystem{
 
     double oldTime = 0;
 
+    //Motor and pinpoint declaration
     private DcMotor frontLeftDrive, backLeftDrive, frontRightDrive, backRightDrive;
+
+    // Heading Lock Variables
+    private double headingSetpoint = 0.0;
+    private boolean isLocking = false;
+    public static double kP = 0.9; //tune to adjust correction strength (between 0.5 and 1.5)
 
     public void init(HardwareMap hwMap, Telemetry telemetry) {
         this.telemetry = telemetry;
@@ -33,27 +42,27 @@ public class fieldCentricMecanum extends Subsystem{
         backRightDrive = hwMap.get(DcMotor.class, "rightBack");
         odo = hwMap.get(GoBildaPinpointDriver.class,"odo");
 
-        odo.setOffsets(-142.93, 30.469, DistanceUnit.MM);
-        odo.setOffsets(-156.325, 91.442, DistanceUnit.MM);
+        //odo.setOffsets(-142.93, 30.469, DistanceUnit.MM);
+        odo.setOffsets(-156.626489257812, 42.521887207031, DistanceUnit.MM);
         odo.setEncoderResolution(74.5027025034, DistanceUnit.MM);
         odo.setEncoderDirections(GoBildaPinpointDriver.EncoderDirection.FORWARD, GoBildaPinpointDriver.EncoderDirection.FORWARD);
         odo.resetPosAndIMU();
 
 
-        //set directions (stole from DriveTrainTest hopefully works)
-        frontLeftDrive.setDirection(DcMotor.Direction.FORWARD);
-        backLeftDrive.setDirection(DcMotor.Direction.FORWARD);
-        frontRightDrive.setDirection(DcMotor.Direction.REVERSE);
-        backRightDrive.setDirection(DcMotor.Direction.REVERSE);
+        //set directions (stole from DriveTrainTest hopefully works) -- needed to reverse them -- zld
+        frontLeftDrive.setDirection(DcMotor.Direction.REVERSE);
+        backLeftDrive.setDirection(DcMotor.Direction.REVERSE);
+        frontRightDrive.setDirection(DcMotor.Direction.FORWARD);
+        backRightDrive.setDirection(DcMotor.Direction.FORWARD);
 
-        frontLeftDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        backLeftDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        frontRightDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        backRightDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        frontLeftDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        backLeftDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        frontRightDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        backRightDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 
     public void drive(double axial, double lateral, double yaw) {
-        odo.update();
+        //odo.update(); moved to fieldCentric() to prevent double updating
 
         double frontLeftPower = axial + lateral + yaw;
         double frontRightPower = axial - lateral - yaw;
@@ -61,7 +70,7 @@ public class fieldCentricMecanum extends Subsystem{
         double backRightPower = axial + lateral - yaw;
 
         double maxPower = 1.0;
-        double maxSpeed = 0.3; //for outreach events, etc. so kids can drive without breaking anything or hurting anyone
+        double maxSpeed = 1.0; //can change for outreach events, etc. so kids can drive without breaking anything or hurting anyone
 
         maxPower = Math.max(maxPower, Math.abs(frontLeftPower));
         maxPower = Math.max(maxPower, Math.abs(backLeftPower));
@@ -77,9 +86,34 @@ public class fieldCentricMecanum extends Subsystem{
     }
 
     public void fieldCentric(double axial, double lateral, double yaw) {
+        odo.update(); //update odo positions and sensors
+        Pose2D pos = odo.getPosition();
+
+        double currentHeading = pos.getHeading(AngleUnit.RADIANS);
+
+        // Heading Lock Controller
+        if (Math.abs(yaw) > 0.05) {
+            //if driver is actively rotating the robot: tracks the new setpoint
+            headingSetpoint = currentHeading;
+            isLocking = false;
+        } else {
+            //Driver not turning: sets current heading as the lock heading
+            if (!isLocking) {
+                headingSetpoint = currentHeading;
+                isLocking = true;
+            }
+            //Calculate shortest path steering error (-PI to PI)
+            double headingError = headingSetpoint - currentHeading;
+            headingError = AngleUnit.normalizeRadians(headingError);
+
+            //Apply proportional gain to override target yaw speed
+            yaw = -headingError * kP;
+        }
+
+        //Odometry for field centric stuff (vector translatino)
         double theta = Math.atan2(axial, lateral);
         double r = Math.hypot(lateral, axial);
-        Pose2D pos = odo.getPosition();
+
 
         String data = String.format(Locale.US, "{X: %.3f, Y: %.3f, H: %.3f}", pos.getX(DistanceUnit.MM), pos.getY(DistanceUnit.MM), pos.getHeading(AngleUnit.DEGREES));
         telemetry.addData("Position", data);
