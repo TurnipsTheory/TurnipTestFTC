@@ -31,7 +31,7 @@ public class fieldCentricMecanum extends Subsystem{
     // Heading Lock Variables
     private double headingSetpoint = 0.0;
     private boolean isLocking = false;
-    public static double kP = 0.9; //tune to adjust correction strength (between 0.5 and 1.5)
+    public static double kP = 0.9; //tune to adjust correction strength for anti-drifting.Tuned 8/16/26 by Zara
 
     public void init(HardwareMap hwMap, Telemetry telemetry) {
         this.telemetry = telemetry;
