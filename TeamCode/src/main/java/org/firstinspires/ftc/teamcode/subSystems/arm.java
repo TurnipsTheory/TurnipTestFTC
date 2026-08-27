@@ -22,14 +22,15 @@ import robotcore.Subsystem;
 public class arm extends Subsystem {
     private final double segment1 = 2;
     public final double segment2 = 3;
+    public Servo yaw, pitch1, pitch2, wrist;
 
     @Override
     public void init(OpMode opMode) {
         instantiateSubsystem(opMode);
-        Servo yaw = hardwareMap.get(Servo.class, "y");
-        Servo pitch1 = hardwareMap.get(Servo.class, "p1");
-        Servo pitch2 = hardwareMap.get(Servo.class, "p2");
-        Servo wrist = hardwareMap.get(Servo.class, "w");
+        yaw = hardwareMap.get(Servo.class, "y");
+        pitch1 = hardwareMap.get(Servo.class, "p1");
+        pitch2 = hardwareMap.get(Servo.class, "p2");
+        wrist = hardwareMap.get(Servo.class, "w");
     }
 
     public void moveArm(double translation, double rotation, double wrist) {
@@ -39,6 +40,8 @@ public class arm extends Subsystem {
         double c = Math.toDegrees(Math.acos((Math.pow(h,2) - Math.pow(segment1, 2) - Math.pow(segment2,2))/(-2*segment1*segment2))); //finds the angle c by reversing law of cosines
         double a = Math.toDegrees(Math.asin(Math.sin(c)*segment1/h) + Math.asin(v/z)); //finds the
 
+        pitch1.setPosition(a);
+        pitch2.setPosition(c);
 
 
     }
