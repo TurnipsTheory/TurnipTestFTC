@@ -123,7 +123,7 @@ public class DriveTrainTest extends Subsystem {
     }
         // run until the end of the match (driver presses STOP)
 
-        public double slewControl(double target, double curret){
+        /* public double slewControl(double target, double curret){
             double output = target;
             if(target >= (curret + SLEW_RATE)){
                 output = curret + SLEW_RATE;
@@ -139,7 +139,7 @@ public class DriveTrainTest extends Subsystem {
             }
 
             return output;
-        }
+        }*/
     double frontLeftPower  = 0.0;
     double frontRightPower = 0.0;
     double backLeftPower   = 0.0;
@@ -156,10 +156,10 @@ public class DriveTrainTest extends Subsystem {
 
             // Combine the joystick requests for each axis-motion to determine each wheel's power.
             // Set up a variable for each drive wheel to save the power level for telemetry.
-            frontLeftPower  = slewControl((axial + lateral + yaw), frontLeftPower);
-            frontRightPower = slewControl((axial - lateral - yaw), frontRightPower);
-            backLeftPower   = slewControl((axial - lateral + yaw), backLeftPower);
-            backRightPower  = slewControl((axial + lateral - yaw), backRightPower);
+            //frontLeftPower  = slewControl((axial + lateral + yaw), frontLeftPower);
+            //frontRightPower = slewControl((axial - lateral - yaw), frontRightPower);
+            //backLeftPower   = slewControl((axial - lateral + yaw), backLeftPower);
+            //backRightPower  = slewControl((axial + lateral - yaw), backRightPower);
 
             // Normalize the values so no wheel power exceeds 100%
             // This ensures that the robot maintains the desired motion.
