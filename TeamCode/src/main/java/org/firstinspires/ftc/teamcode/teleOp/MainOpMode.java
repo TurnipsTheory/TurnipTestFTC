@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.teamcode.subSystems.DriveTrainTest;
 import org.firstinspires.ftc.teamcode.subSystems.Intake;
 import org.firstinspires.ftc.teamcode.subSystems.MotorOuttake;
+import org.firstinspires.ftc.teamcode.subSystems.Slides;
 import org.firstinspires.ftc.teamcode.subSystems.Turret;
 
 
@@ -32,5 +33,6 @@ public class MainOpMode extends OpMode {
         Intake.runIntake();
         MotorOuttake.runOuttake();
         telemetry.update();
+        Slides.update();
     }
 }
