@@ -20,30 +20,80 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
 import robotcore.Subsystem;
 public class arm extends Subsystem {
-    private final double segment1 = 2;
-    public final double segment2 = 3;
-    public Servo yaw, pitch1, pitch2, wrist;
+    public double segment1 = 5.5; // INCHES. final: finalizes vaianblr; public: everyone can use; =: important
+    public double segment2 = 9;// in
+
+    public Servo yaw, pitch1r, pitch1l, pitch2, wrist;
+    AnalogInput yEncoder, p1Encoder, p2Encoder, wEncoder;
+
 
     @Override
     public void init(OpMode opMode) {
         instantiateSubsystem(opMode);
+//        yEncoder = hardwareMap.get(AnalogInput.class, "yEncoder");
+//        p1Encoder = hardwareMap.get(AnalogInput.class, "p1Encoder");
+//        p2Encoder = hardwareMap.get(AnalogInput.class, "p2Encoder");
+//        wEncoder= hardwareMap.get(AnalogInput.class, "wEncoder");
         yaw = hardwareMap.get(Servo.class, "y");
-        pitch1 = hardwareMap.get(Servo.class, "p1");
+        pitch1r = hardwareMap.get(Servo.class, "p1r");
+        pitch1l = hardwareMap.get(Servo.class, "p1l");
         pitch2 = hardwareMap.get(Servo.class, "p2");
-        wrist = hardwareMap.get(Servo.class, "w");
-    }
+//        wrist = hardwareMap.get(Servo.class, "w");
+//        pitch2.setDirection(Servo.Direction.REVERSE);
+        pitch1l.setDirection(Servo.Direction.REVERSE);
 
-    public void moveArm(double translation, double rotation, double wrist) {
+    }
+    public void armInit() { //gets it into a starting position
+        pitch1r.setPosition(0.5);
+        pitch1l.setPosition(0.5);
+        pitch2.setPosition(0.6);
+        yaw.setPosition(0);
+//        wrist.setPosition(2);
+
+    }
+    public void armFold() { //folds arm up
+        pitch2.setPosition(0);
+
+//        pitch1.setPosition(2);
+//        pitch2.setPosition(4);
+//        yaw.setPosition(3);
+//        wrist.setPosition(2);
+    }
+    public void moveArm(double translation, double rotation, double wrotation) {
         double h = translation; //needs some sort adjusting to go rom 0-1 range --> actual distance values.
         double v = 0;
         double z = Math.sqrt(Math.pow(h, 2) + Math.pow(v, 2));
         double c = Math.toDegrees(Math.acos((Math.pow(h,2) - Math.pow(segment1, 2) - Math.pow(segment2,2))/(-2*segment1*segment2))); //finds the angle c by reversing law of cosines
         double a = Math.toDegrees(Math.asin(Math.sin(c)*segment1/h) + Math.asin(v/z)); //finds the
+        double r = rotation;
+        double w = wrotation;
 
-        pitch1.setPosition(a);
-        pitch2.setPosition(c);
+        if (gamepad2.aWasPressed()) {
 
-
+        } else{
+//            pitch1.setPosition(a);
+            pitch2.setPosition(c);
+            yaw.setPosition(r);
+            wrist.setPosition(w);
+        }
     }
-
+//    public void armRead() {
+//        double voltage = yEncoder.getVoltage(); // Returns voltage (typically 0.0 to 3.3V)
+//        double maxVoltage = yEncoder.getMaxVoltage();
+//        double positionFraction = voltage / maxVoltage;
+//        telemetry.addLine(String.format(Locale.US, "y: %6.0f", positionFraction));
+//        voltage = p1Encoder.getVoltage(); // Returns voltage (typically 0.0 to 3.3V)
+//        maxVoltage = p1Encoder.getMaxVoltage();
+//        positionFraction = voltage / maxVoltage;
+//        telemetry.addLine(String.format(Locale.US, "p1: %6.0f", positionFraction));
+//        voltage = p2Encoder.getVoltage(); // Returns voltage (typically 0.0 to 3.3V)
+//        maxVoltage = p2Encoder.getMaxVoltage();
+//        positionFraction = voltage / maxVoltage;
+//        telemetry.addLine(String.format(Locale.US, "p2: %6.0f", positionFraction));
+//        voltage = wEncoder.getVoltage(); // Returns voltage (typically 0.0 to 3.3V)
+//        maxVoltage = wEncoder.getMaxVoltage();
+//        positionFraction = voltage / maxVoltage;
+//        telemetry.addLine(String.format(Locale.US, "w: %6.0f", positionFraction));
+//
+//    }
 }
