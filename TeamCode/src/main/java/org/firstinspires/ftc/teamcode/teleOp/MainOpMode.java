@@ -16,6 +16,7 @@ public class MainOpMode extends OpMode {
     Intake Intake = new Intake();
     MotorOuttake MotorOuttake = new MotorOuttake();
     Turret Turret = new Turret();
+    Slides Slides = new Slides();
 
 
 
@@ -24,6 +25,7 @@ public class MainOpMode extends OpMode {
         DriveTrain.init(this);
         Intake.init(this);
         MotorOuttake.init(this);
+        Slides.init(this);
     }
 
     @Override
@@ -33,6 +35,6 @@ public class MainOpMode extends OpMode {
         Intake.runIntake();
         MotorOuttake.runOuttake();
         telemetry.update();
-        Slides.update();
+        Slides.testing();
     }
 }

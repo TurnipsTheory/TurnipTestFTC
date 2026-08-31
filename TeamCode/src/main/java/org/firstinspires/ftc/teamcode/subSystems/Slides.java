@@ -15,7 +15,7 @@ public class Slides extends Subsystem {
     private DcMotorEx liftMotorLeft;
     private DcMotorEx liftMotorRight;
 
-    private PID liftPID = new PID(0.013, 0, 0.13,0.005); // Tuned PID coefficients
+    private final PID liftPID = new PID(0.013, 0, 0.13,0.005); // Tuned PID coefficients
 
     private final int LIFT_TOP_POSITION = 2210; // Adjust based on lift's top position
     private int LIFT_BOTTOM_POSITION; // Bottom position (assume 0 for base)
@@ -25,7 +25,7 @@ public class Slides extends Subsystem {
     private double lastManualInput = 0.0;
 
     @Override
-    public void init() {
+    public void init(OpMode opMode) {
         liftMotorLeft = hardwareMap.get(DcMotorEx.class, "liftMotorLeft"); // Motor with encoder
         liftMotorLeft.setDirection(DcMotor.Direction.REVERSE);
 
@@ -47,6 +47,12 @@ public class Slides extends Subsystem {
         targetPosition = LIFT_BOTTOM_POSITION; // Start at the bottom
 
         liftPID.setOutputLimits(-1.0, 1.0);
+    }
+
+    public void testing(){
+        if(gamepad1.xWasPressed()) {
+            setPos(45); //45 inches (start with something slightly lower just in case of oscillation
+        }
     }
 
     public void setPos(int height) {
@@ -137,8 +143,4 @@ public class Slides extends Subsystem {
         targetPosition = Range.clip(targetPosition, LIFT_BOTTOM_POSITION, LIFT_TOP_POSITION);
     }
 
-    @Override
-    public void init(OpMode opMode) {
-
-    }
 }

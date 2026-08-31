@@ -26,7 +26,7 @@ public abstract class Subsystem {
     }
 
 
-    public abstract void init();
+    //public abstract void init();
 
     public abstract void init(OpMode opMode);
 
