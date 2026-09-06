@@ -26,9 +26,13 @@ public abstract class Subsystem {
     }
 
 
+    public void initialize(OpMode opMode) {
+        instantiateSubsystem(opMode);
+        init();
+    } //^^ some weird chat method to fix our abstract class issues
     public abstract void init();
 
-    public abstract void init(OpMode opMode);
+    //public abstract void init(OpMode opMode);
 
 
  }

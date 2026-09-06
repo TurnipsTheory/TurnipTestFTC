@@ -27,8 +27,7 @@ public class Turret extends Subsystem {
     boolean manuel = true;
 
     @Override
-    public void init(OpMode opMode) {
-        instantiateSubsystem(opMode);
+    public void init(/*OpMode opMode*/) {
         initAprilTag();
         CRServo turretServo = hardwareMap.get(CRServo.class, "turret_servo");
         AnalogInput turretEncoder = hardwareMap.get(AnalogInput.class, "turret_servo_encoder");
@@ -107,6 +106,7 @@ public class Turret extends Subsystem {
                 .addProcessor(aprilTag)
                 .build();
     }
+
 }
 
 

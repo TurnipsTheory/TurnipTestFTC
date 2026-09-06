@@ -19,7 +19,7 @@ import java.util.Locale;
 import com.acmerobotics.dashboard.config.Config;
 @Config //so we can tune using the FTC dashboard
 public class fieldCentricMecanum extends Subsystem{
-    private Telemetry telemetry;
+    //private Telemetry telemetry;
 
     GoBildaPinpointDriver odo; // Declare OpMode member for the Odometry Computer
 
@@ -34,13 +34,13 @@ public class fieldCentricMecanum extends Subsystem{
     public static double kP = 0.9; //tune to adjust correction strength for anti-drifting.Tuned 8/16/26 by Zara
 
     public void init(HardwareMap hwMap, Telemetry telemetry) {
-        this.telemetry = telemetry;
+        //this.telemetry = telemetry;
         //connect actual motors to programmable objects
-        frontLeftDrive = hwMap.get(DcMotor.class, "leftFront");
-        backLeftDrive = hwMap.get(DcMotor.class, "leftBack");
-        frontRightDrive = hwMap.get(DcMotor.class, "rightFront");
-        backRightDrive = hwMap.get(DcMotor.class, "rightBack");
-        odo = hwMap.get(GoBildaPinpointDriver.class,"odo");
+        frontLeftDrive = hardwareMap.get(DcMotor.class, "leftFront");
+        backLeftDrive = hardwareMap.get(DcMotor.class, "leftBack");
+        frontRightDrive = hardwareMap.get(DcMotor.class, "rightFront");
+        backRightDrive = hardwareMap.get(DcMotor.class, "rightBack");
+        odo = hardwareMap.get(GoBildaPinpointDriver.class,"odo");
 
         //odo.setOffsets(-142.93, 30.469, DistanceUnit.MM);
         odo.setOffsets(-156.626489257812, 42.521887207031, DistanceUnit.MM);
@@ -127,8 +127,9 @@ public class fieldCentricMecanum extends Subsystem{
         this.drive(newAxial, newStrafe, yaw);
     }
 
+
     @Override
-    public void init(OpMode opMode) {
+    public void init() {
 
     }
 }

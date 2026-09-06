@@ -1,32 +1,32 @@
-package org.firstinspires.ftc.teamcode.teleOp;
-
-import com.qualcomm.robotcore.eventloop.opmode.OpMode;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-
-import org.firstinspires.ftc.teamcode.subSystems.DriveTrainTest;
-import org.firstinspires.ftc.teamcode.subSystems.Intake;
-import org.firstinspires.ftc.teamcode.subSystems.MotorOuttake;
-
-
-@TeleOp(name="RoboTwoOpMode")
-public class testttt extends OpMode {
-    DriveTrainTest DriveTrain = new DriveTrainTest();
-    Intake Intake = new Intake();
-    MotorOuttake MotorOuttake = new MotorOuttake();
-
-
-    public void init(){
-        DriveTrain.init(this);
-        Intake.init(this);
-        MotorOuttake.init(this);
-    }
-
-    @Override
-    public void loop() {
-
-        DriveTrain.mecanumDrive();
-        Intake.runIntake();
-        MotorOuttake.runOuttake();
-
-    }
-}
+//package org.firstinspires.ftc.teamcode.teleOp;
+//
+//import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+//import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+//
+////import org.firstinspires.ftc.teamcode.subSystems.DriveTrainTest;
+//import org.firstinspires.ftc.teamcode.subSystems.Intake;
+//import org.firstinspires.ftc.teamcode.subSystems.MotorOuttake;
+//
+//
+//@TeleOp(name="RoboTwoOpMode")
+//public class testttt extends OpMode {
+//    //DriveTrainTest DriveTrain = new DriveTrainTest();
+//    Intake Intake = new Intake();
+//    MotorOuttake MotorOuttake = new MotorOuttake();
+//
+//
+//    public void init(){
+//        //DriveTrain.init(this);
+//        Intake.init(this);
+//        MotorOuttake.init(this);
+//    }
+//
+//    @Override
+//    public void loop() {
+//
+//        //DriveTrain.mecanumDrive();
+//        Intake.runIntake();
+//        MotorOuttake.runOuttake();
+//
+//    }
+//}

@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.subSystems;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
@@ -16,13 +17,14 @@ public class Slides extends Subsystem {
     private DcMotorEx liftMotorRight;
 
     private PID liftPID = new PID(0.013, 0, 0.13,0.005); // Tuned PID coefficients
-
-    private final int LIFT_TOP_POSITION = 2210; // Adjust based on lift's top position
-    private int LIFT_BOTTOM_POSITION; // Bottom position (assume 0 for base)
+    private final double TICKS_PER_INCH = 96.6; //Ticks per inch conversion for Gobilda 435RPM
+    private final int LIFT_TOP_POSITION = 4347; // Adjust based on lift's top position
+    private int LIFT_BOTTOM_POSITION = 0; // Bottom position (assume 0 for base)
 
     private double targetPosition = 0.0;
     private boolean liftHolding = false;
     private double lastManualInput = 0.0;
+
 
     @Override
     public void init() {
@@ -30,7 +32,7 @@ public class Slides extends Subsystem {
         liftMotorLeft.setDirection(DcMotor.Direction.REVERSE);
 
         liftMotorRight = hardwareMap.get(DcMotorEx.class, "liftMotorRight"); // Motor without encoder
-        liftMotorRight.setDirection(DcMotor.Direction.REVERSE);
+        liftMotorRight.setDirection(DcMotor.Direction.FORWARD);
 
         // Initialize liftMotorLeft
         liftMotorLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -49,7 +51,7 @@ public class Slides extends Subsystem {
         liftPID.setOutputLimits(-1.0, 1.0);
     }
 
-    public void setPos(int height) {
+    public void setPos(double height) {
         // Set the target position within bounds
         targetPosition = Range.clip(height, LIFT_BOTTOM_POSITION, LIFT_TOP_POSITION);
         liftPID.reset(); // Reset the PID controller
@@ -64,6 +66,8 @@ public class Slides extends Subsystem {
             // Calculate the PID output
             double currentPosition = liftMotorLeft.getCurrentPosition();
             double pidOutput = liftPID.getOutput(currentPosition, targetPosition);
+
+            telemetry.addData("PID Output", pidOutput);
 
             // Apply the PID output to the motors
             liftMotorLeft.setPower(pidOutput);
@@ -107,6 +111,7 @@ public class Slides extends Subsystem {
 
         double currentPosition = liftMotorLeft.getCurrentPosition();
         double pidOutput = liftPID.getOutput(currentPosition, targetPosition);
+        telemetry.addData("Apply PID Output", pidOutput);
 
         // Apply power to motors
         liftMotorLeft.setPower(pidOutput);
@@ -137,8 +142,20 @@ public class Slides extends Subsystem {
         targetPosition = Range.clip(targetPosition, LIFT_BOTTOM_POSITION, LIFT_TOP_POSITION);
     }
 
-    @Override
-    public void init(OpMode opMode) {
+//    @Override
+//    public void init(OpMode opMode) {
+//
+//    }
 
+    public void runSlides(){
+        if (gamepad2.rightBumperWasPressed()){
+            setPos(45 * TICKS_PER_INCH);
+            telemetry.addData("Lift Activate! Height: ", liftMotorLeft.getCurrentPosition());
+        }
+        if (gamepad2.leftBumperWasPressed()){
+            setPos(0);
+            telemetry.addData("Lift Deactivate! Height: ", liftMotorLeft.getCurrentPosition());
+        }
     }
+
 }

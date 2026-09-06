@@ -20,8 +20,8 @@ public class MotorOuttake extends Subsystem {
 
 
     @Override
-    public void init(OpMode opMode) {
-        instantiateSubsystem(opMode);
+    public void init( ) {
+        //instantiateSubsystem(opMode);
 
         OuttakeMotorLeft = hardwareMap.get(DcMotorEx.class, "outtake_motor_left");
         OuttakeMotorRight = hardwareMap.get(DcMotorEx.class, "outtake_motor_right");
@@ -90,6 +90,7 @@ public class MotorOuttake extends Subsystem {
         telemetry.addData("rpm", rpm);
         telemetry.update();
     }
+
 }
 
 
