@@ -13,7 +13,6 @@ public class fieldCentricDrive extends OpMode{
     public double oldTime = 0;
     public final double num = 10;
     public boolean collecting = false, intake = true;
-
     fieldCentricMecanum drive = new fieldCentricMecanum();
     arm arm = new arm();
     double axial, lateral, yaw, translation, rotation = 90/320.0, wrist = 0.5;
@@ -31,7 +30,6 @@ public class fieldCentricDrive extends OpMode{
         lateral = -gamepad1.left_stick_x;
         yaw = gamepad1.right_stick_x;
 
-
         if (intake) {
             arm.horizontal(true);
             if (!collecting) {
@@ -43,11 +41,6 @@ public class fieldCentricDrive extends OpMode{
                 if (gamepad2.left_stick_x > 0 && rotation <= 180/320.0 || gamepad2.left_stick_x < 0 && rotation >= 0) {
                     rotation = rotation + gamepad2.left_stick_x/100.0;
                 }
-//                if (gamepad2.dpad_right && rotation > 0 && rotation <= 180/320.0 + 0.01) {
-//                    rotation -= 0.01;
-//                } else if (gamepad2.dpad_left && rotation >= -0.01 && rotation < 180/320.0) {
-//                    rotation += 0.01;
-//                }
                 if (gamepad2.dpadUpWasPressed() && translation >= 1 && translation != 3) {
                     translation += 1;
                 } else if (gamepad2.dpadDownWasPressed() && translation <= 3 && translation != 1) {
@@ -57,7 +50,6 @@ public class fieldCentricDrive extends OpMode{
             } else {
                 arm.collect();
             }
-
             if (gamepad2.aWasPressed()) {
                 collecting = !collecting;
             }
@@ -66,7 +58,6 @@ public class fieldCentricDrive extends OpMode{
             wrist = 0.5;
             arm.armFold();
         }
-
         if (gamepad2.bWasPressed()) {
             intake = !intake;
             if (!intake) {
