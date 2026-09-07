@@ -1,11 +1,7 @@
 package robotcore;
 import com.qualcomm.robotcore.hardware.HardwareMap;
-
 import com.qualcomm.robotcore.hardware.Gamepad;
-import com.qualcomm.robotcore.hardware.HardwareMap;
-
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
 public abstract class Subsystem {
@@ -26,11 +22,13 @@ public abstract class Subsystem {
     }
 
 
-    public void initialize(OpMode opMode) {
-        instantiateSubsystem(opMode);
-        init();
-    } //^^ some weird chat method to fix our abstract class issues
-    public abstract void init();
+//    public void initialize(OpMode opMode) {
+//        instantiateSubsystem(opMode);
+//        init(opMode);
+//    } //^^ some weird chat method to fix our abstract class issues
+//    public abstract void init();
+
+    public abstract void init(OpMode opMode);
 
     //public abstract void init(OpMode opMode);
 

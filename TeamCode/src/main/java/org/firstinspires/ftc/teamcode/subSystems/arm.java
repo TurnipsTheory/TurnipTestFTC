@@ -18,7 +18,7 @@ public class arm extends Subsystem {
     public Servo yaw, pitch1r, pitch1l, pitch2, wrist, slidel,slider; //creates servo objects for all the servos invovled with the subsystem
     int i = 0; //i use this to count time to delay certain actions relative to others since damn java sucks at counting time
 
-    @Override
+
     public void init(OpMode opMode) { // this is the init method (short for initilize). links all the servo objects to their respective servos and sets their direction.
         instantiateSubsystem(opMode);
         yaw = hardwareMap.get(Servo.class, "y");

@@ -3,14 +3,10 @@ package org.firstinspires.ftc.teamcode.subSystems;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.util.Range;
-
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.robotcorelib.PID;
-
 import robotcore.Subsystem;
-//import org.firstinspires.ftc.teamcode.robotcorelib.util.subSystems;
 
 public class Slides extends Subsystem {
     private DcMotorEx liftMotorLeft;
@@ -27,7 +23,7 @@ public class Slides extends Subsystem {
 
 
     @Override
-    public void init() {
+    public void init(OpMode opMode) {
         liftMotorLeft = hardwareMap.get(DcMotorEx.class, "liftMotorLeft"); // Motor with encoder
         liftMotorLeft.setDirection(DcMotor.Direction.REVERSE);
 

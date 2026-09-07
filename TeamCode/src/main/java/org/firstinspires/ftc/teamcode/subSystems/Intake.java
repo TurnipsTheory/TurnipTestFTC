@@ -7,15 +7,10 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import robotcore.Subsystem;
 
 public class Intake extends Subsystem {
-
     private DcMotor intakeMotor = null;
-    boolean isOn = false;
-    boolean revIsOn = false;
-
-
+    boolean isOn = false, revIsOn = false;
     @Override
-    public void init() {
-
+    public void init(OpMode opMode) {
         intakeMotor = hardwareMap.get(DcMotor.class,"intake_motor");
         intakeMotor.setDirection(DcMotorSimple.Direction.REVERSE);
     }
@@ -47,6 +42,4 @@ public class Intake extends Subsystem {
         }
 
     }
-
-
 }

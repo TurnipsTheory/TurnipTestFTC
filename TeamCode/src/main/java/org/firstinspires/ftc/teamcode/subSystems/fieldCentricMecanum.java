@@ -1,30 +1,22 @@
 //stolen from brogan m pratt vid
 
 package org.firstinspires.ftc.teamcode.subSystems;
-
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
-
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.auton.GoBildaPinpointDriver;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
 import robotcore.Subsystem;
-
 import java.util.Locale;
-
 import com.acmerobotics.dashboard.config.Config;
 @Config //so we can tune using the FTC dashboard
 public class fieldCentricMecanum extends Subsystem{
     //private Telemetry telemetry;
-
     GoBildaPinpointDriver odo; // Declare OpMode member for the Odometry Computer
-
     double oldTime = 0;
-
     //Motor and pinpoint declaration
     private DcMotor frontLeftDrive, backLeftDrive, frontRightDrive, backRightDrive;
 
@@ -47,7 +39,6 @@ public class fieldCentricMecanum extends Subsystem{
         odo.setEncoderResolution(74.5027025034, DistanceUnit.MM);
         odo.setEncoderDirections(GoBildaPinpointDriver.EncoderDirection.FORWARD, GoBildaPinpointDriver.EncoderDirection.FORWARD);
         odo.resetPosAndIMU();
-
 
         //set directions (stole from DriveTrainTest hopefully works) -- needed to reverse them -- zld
         frontLeftDrive.setDirection(DcMotor.Direction.REVERSE);
@@ -114,7 +105,6 @@ public class fieldCentricMecanum extends Subsystem{
         double theta = Math.atan2(axial, lateral);
         double r = Math.hypot(lateral, axial);
 
-
         String data = String.format(Locale.US, "{X: %.3f, Y: %.3f, H: %.3f}", pos.getX(DistanceUnit.MM), pos.getY(DistanceUnit.MM), pos.getHeading(AngleUnit.DEGREES));
         telemetry.addData("Position", data);
         telemetry.update();
@@ -129,7 +119,7 @@ public class fieldCentricMecanum extends Subsystem{
 
 
     @Override
-    public void init() {
+    public void init(OpMode opMode) {
 
     }
 }

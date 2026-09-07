@@ -4,31 +4,19 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 
 @TeleOp
 public class Flywheel extends OpMode{
-
-    boolean isOn;
-    public DcMotorEx OuttakeMotorRight = null;
-    public DcMotorEx OuttakeMotorLeft = null;
-    public double highVelocity = 1500;
-    public double lowVelocity = 900;
-    public double curTargetVelocity = highVelocity;
-    double FR= 0;
-    double PR = 0;
-    double FL = 0;
-    double PL = 0;
+    boolean isOn, rightTuning = true;
+    public DcMotorEx OuttakeMotorRight = null, OuttakeMotorLeft = null;
+    public double lowVelocity = 900, highVelocity = 1500, curTargetVelocity = highVelocity;
+    double FR= 0, PR = 0, FL = 0, PL = 0;
     double[] stepSizes = {10.0, 1.0, 0.1, 0.001, 0.0001};
     int stepIndex = 1;
 
-    boolean rightTuning = true;
-
-
     @Override
     public void init() {
-        //instantiateSubsystem(opMode);
         OuttakeMotorRight = hardwareMap.get(DcMotorEx.class, "outtake_motor_right");
         OuttakeMotorRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         OuttakeMotorRight.setDirection(DcMotor.Direction.REVERSE);
@@ -40,6 +28,7 @@ public class Flywheel extends OpMode{
         OuttakeMotorLeft.setDirection(DcMotor.Direction.FORWARD);
         PIDFCoefficients pidfCoefficientsL = new PIDFCoefficients(PL,0,0,FL);
         OuttakeMotorLeft.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER,pidfCoefficientsL);
+
         telemetry.addLine("Init  complete");
     }
 
@@ -58,6 +47,7 @@ public class Flywheel extends OpMode{
         if(gamepad1.bWasPressed()){
             stepIndex = (stepIndex + 1) % stepSizes.length;
         }
+
         if(gamepad1.xWasPressed()){
             if (rightTuning){
                 rightTuning = false;

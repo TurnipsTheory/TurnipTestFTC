@@ -2,7 +2,6 @@ package org.firstinspires.ftc.teamcode.subSystems;
 
 import com.qualcomm.robotcore.hardware.AnalogInput;
 import com.qualcomm.robotcore.hardware.CRServo;
-
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
@@ -10,12 +9,9 @@ import org.firstinspires.ftc.teamcode.teleOp.RTPAxon;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
-
 import java.util.List;
 import java.util.Locale;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
-
-
 import robotcore.Subsystem;
 
 public class Turret extends Subsystem {
@@ -27,7 +23,7 @@ public class Turret extends Subsystem {
     boolean manuel = true;
 
     @Override
-    public void init(/*OpMode opMode*/) {
+    public void init(OpMode opMode) {
         initAprilTag();
         CRServo turretServo = hardwareMap.get(CRServo.class, "turret_servo");
         AnalogInput turretEncoder = hardwareMap.get(AnalogInput.class, "turret_servo_encoder");
