@@ -14,8 +14,7 @@ public class Intake extends Subsystem {
 
 
     @Override
-    public void init(OpMode opMode) {
-        instantiateSubsystem(opMode);
+    public void init() {
 
         intakeMotor = hardwareMap.get(DcMotor.class,"intake_motor");
         intakeMotor.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -48,5 +47,6 @@ public class Intake extends Subsystem {
         }
 
     }
+
 
 }

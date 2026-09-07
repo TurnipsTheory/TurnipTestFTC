@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.teleOp;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
+import org.firstinspires.ftc.teamcode.subSystems.Slides;
 import org.firstinspires.ftc.teamcode.subSystems.fieldCentricMecanum;
 import org.firstinspires.ftc.teamcode.subSystems.arm;
 
@@ -14,15 +15,18 @@ public class fieldCentricDrive extends OpMode{
     public final double num = 10;
     public boolean collecting = false, intake = true;
     fieldCentricMecanum drive = new fieldCentricMecanum();
+    Slides slide = new Slides();
     arm arm = new arm();
-    double axial, lateral, yaw, translation, rotation = 90/320.0, wrist = 0.5;
+    double axial, lateral, yaw, translation = 1, rotation = 90/320.0, wrist = 0.5;
 
     public void init() {
-        translation = 1;
+        drive.instantiateSubsystem(this);
+        slide.instantiateSubsystem(this);
         drive.init(hardwareMap, telemetry);
         arm.init(this);
-        arm.horizontal(intake);
         arm.armInit();
+        slide.init();
+        arm.horizontal(intake);
     }
 
     public void loop() {
@@ -30,6 +34,7 @@ public class fieldCentricDrive extends OpMode{
         lateral = -gamepad1.left_stick_x;
         yaw = gamepad1.right_stick_x;
 
+        //intake logic (yes disgusting if loop spam, i know)
         if (intake) {
             arm.horizontal(true);
             if (!collecting) {
@@ -64,8 +69,13 @@ public class fieldCentricDrive extends OpMode{
                 collecting = false;
             }
         }
-
+        //drive train (oh so clean)
         drive.fieldCentric(axial, lateral, yaw);
+
+        //slides (beautiful)
+        slide.runSlides(); //runs slides
+        slide.update(); //PID engine stuff
+        slide.telemetry(telemetry); //sends telemetry to Driver Station
 
         double newTime = getRuntime();
         double loopTime = newTime-oldTime;

@@ -81,15 +81,12 @@ public class DriveTrainTest extends Subsystem {
     private DcMotor frontRightDrive = null;
     private DcMotor backRightDrive = null;
 
-
     @Override
-    public void init(OpMode opMode) {
-        instantiateSubsystem(opMode);
-
+    public void init() {
         if (hardwareMap == null){
-            telemetry.addData("u messed up buddy","sigma");
+            telemetry.addData("null", "null");
             telemetry.update();
-            throw new RuntimeException("whats up ma sigma");
+            throw new RuntimeException("error");
         }
 
         // Initialize the hardware variables. Note that the strings used here must correspond
@@ -197,4 +194,5 @@ public class DriveTrainTest extends Subsystem {
             telemetry.addData("Back  left/Right", "%4.2f, %4.2f", backLeftPower, backRightPower);
             telemetry.update();
         }
+
     }
